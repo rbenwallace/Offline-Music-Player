@@ -21,6 +21,10 @@
 		E8E1121F27E09FE900D96111 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E111F127E09FE900D96111 /* Persistence.swift */; };
 		E8E1122027E09FE900D96111 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E8E111F227E09FE900D96111 /* Assets.xcassets */; };
 		E8E1122127E09FE900D96111 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E8E111F227E09FE900D96111 /* Assets.xcassets */; };
+		E8E1123C27E1A2AF00D96111 /* Song+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E1123827E1A2AF00D96111 /* Song+CoreDataClass.swift */; };
+		E8E1123D27E1A2AF00D96111 /* Song+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E1123927E1A2AF00D96111 /* Song+CoreDataProperties.swift */; };
+		E8E1123E27E1A2AF00D96111 /* Playlist+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E1123A27E1A2AF00D96111 /* Playlist+CoreDataClass.swift */; };
+		E8E1123F27E1A2AF00D96111 /* Playlist+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E1123B27E1A2AF00D96111 /* Playlist+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +59,10 @@
 		E8E1121027E09FE900D96111 /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8E1121427E09FE900D96111 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		E8E1121627E09FE900D96111 /* Tests_macOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOSLaunchTests.swift; sourceTree = "<group>"; };
+		E8E1123827E1A2AF00D96111 /* Song+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Song+CoreDataClass.swift"; sourceTree = "<group>"; };
+		E8E1123927E1A2AF00D96111 /* Song+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Song+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		E8E1123A27E1A2AF00D96111 /* Playlist+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Playlist+CoreDataClass.swift"; sourceTree = "<group>"; };
+		E8E1123B27E1A2AF00D96111 /* Playlist+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Playlist+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +111,10 @@
 		E8E111EC27E09FE800D96111 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				E8E1123827E1A2AF00D96111 /* Song+CoreDataClass.swift */,
+				E8E1123927E1A2AF00D96111 /* Song+CoreDataProperties.swift */,
+				E8E1123A27E1A2AF00D96111 /* Playlist+CoreDataClass.swift */,
+				E8E1123B27E1A2AF00D96111 /* Playlist+CoreDataProperties.swift */,
 				E8E111EF27E09FE800D96111 /* Offline_Music_PlayerApp.swift */,
 				E8E111F027E09FE900D96111 /* ContentView.swift */,
 				E8E111F127E09FE900D96111 /* Persistence.swift */,
@@ -307,7 +319,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E8E1123D27E1A2AF00D96111 /* Song+CoreDataProperties.swift in Sources */,
 				E8E1121A27E09FE900D96111 /* Offline_Music_PlayerApp.swift in Sources */,
+				E8E1123E27E1A2AF00D96111 /* Playlist+CoreDataClass.swift in Sources */,
+				E8E1123F27E1A2AF00D96111 /* Playlist+CoreDataProperties.swift in Sources */,
+				E8E1123C27E1A2AF00D96111 /* Song+CoreDataClass.swift in Sources */,
 				E8E1121E27E09FE900D96111 /* Persistence.swift in Sources */,
 				E8E1121827E09FE900D96111 /* Database.xcdatamodeld in Sources */,
 				E8E1121C27E09FE900D96111 /* ContentView.swift in Sources */,
