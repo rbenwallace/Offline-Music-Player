@@ -20,6 +20,8 @@
 		E83C660627E1AB41004605A0 /* QueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65F927E1AB41004605A0 /* QueueView.swift */; };
 		E83C660727E1AB41004605A0 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65FA27E1AB41004605A0 /* Model.swift */; };
 		E83C660827E1AB41004605A0 /* ItemObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65FB27E1AB41004605A0 /* ItemObserver.swift */; };
+		E83C661327E1B216004605A0 /* TimeObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C661227E1B216004605A0 /* TimeObserver.swift */; };
+		E83C661527E1B287004605A0 /* DurationObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C661427E1B287004605A0 /* DurationObserver.swift */; };
 		E8E1120927E09FE900D96111 /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E1120827E09FE900D96111 /* Tests_iOS.swift */; };
 		E8E1120B27E09FE900D96111 /* Tests_iOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E1120A27E09FE900D96111 /* Tests_iOSLaunchTests.swift */; };
 		E8E1121527E09FE900D96111 /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E1121427E09FE900D96111 /* Tests_macOS.swift */; };
@@ -72,6 +74,8 @@
 		E83C65FA27E1AB41004605A0 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		E83C65FB27E1AB41004605A0 /* ItemObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemObserver.swift; sourceTree = "<group>"; };
 		E83C660927E1ACD3004605A0 /* Offline-Music-Player--iOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Offline-Music-Player--iOS--Info.plist"; sourceTree = "<group>"; };
+		E83C661227E1B216004605A0 /* TimeObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeObserver.swift; sourceTree = "<group>"; };
+		E83C661427E1B287004605A0 /* DurationObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationObserver.swift; sourceTree = "<group>"; };
 		E8E111EE27E09FE800D96111 /* Shared.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Shared.xcdatamodel; sourceTree = "<group>"; };
 		E8E111EF27E09FE800D96111 /* Offline_Music_PlayerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Offline_Music_PlayerApp.swift; sourceTree = "<group>"; };
 		E8E111F027E09FE900D96111 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -165,6 +169,8 @@
 			isa = PBXGroup;
 			children = (
 				E83C65FB27E1AB41004605A0 /* ItemObserver.swift */,
+				E83C661227E1B216004605A0 /* TimeObserver.swift */,
+				E83C661427E1B287004605A0 /* DurationObserver.swift */,
 			);
 			path = Observer;
 			sourceTree = "<group>";
@@ -426,6 +432,7 @@
 			files = (
 				E83C65FE27E1AB41004605A0 /* TimeFormat.swift in Sources */,
 				E83C660627E1AB41004605A0 /* QueueView.swift in Sources */,
+				E83C661327E1B216004605A0 /* TimeObserver.swift in Sources */,
 				E8E1123D27E1A2AF00D96111 /* Song+CoreDataProperties.swift in Sources */,
 				E8E1121A27E09FE900D96111 /* Offline_Music_PlayerApp.swift in Sources */,
 				E8E1123E27E1A2AF00D96111 /* Playlist+CoreDataClass.swift in Sources */,
@@ -440,6 +447,7 @@
 				E83C660527E1AB41004605A0 /* PlaylistView.swift in Sources */,
 				E83C660027E1AB41004605A0 /* CustonAlert.swift in Sources */,
 				E83C660827E1AB41004605A0 /* ItemObserver.swift in Sources */,
+				E83C661527E1B287004605A0 /* DurationObserver.swift in Sources */,
 				E83C660727E1AB41004605A0 /* Model.swift in Sources */,
 				E83C660327E1AB41004605A0 /* LibraryView.swift in Sources */,
 				E83C65FF27E1AB41004605A0 /* PlaylistSongsView.swift in Sources */,

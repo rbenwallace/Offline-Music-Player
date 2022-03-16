@@ -189,54 +189,5 @@ class Model: ObservableObject {
         // just send back the first one, which ought to be the only one
         return paths[0]
     }
-    
-    class TimeObserver {
-        let publisher = PassthroughSubject<TimeInterval, Never>()
-        private weak var player: AVQueuePlayer?
-        private var timeObservation: Any?
-        private var paused = false
-        
-        init(player: AVQueuePlayer) {
-            self.player = player
-            
-            // Periodically observe the player's current time, whilst playing
-            timeObservation = player.addPeriodicTimeObserver(forInterval: CMTime(seconds: 0.5, preferredTimescale: 600), queue: nil) { [weak self] time in
-                guard let self = self else { return }
-                // If we've not been told to pause our updates
-                guard !self.paused else { return }
-                // Publish the new player time
-                self.publisher.send(time.seconds)
-            }
-        }
-        
-        deinit {
-            if let player = player,
-                let observer = timeObservation {
-                player.removeTimeObserver(observer)
-            }
-        }
-        
-        func pause(_ pause: Bool) {
-            paused = pause
-        }
-    }
-    
-    class DurationObserver {
-        let publisher = PassthroughSubject<TimeInterval, Never>()
-        private var cancellable: AnyCancellable?
-        
-        init(player: AVQueuePlayer) {
-            let durationKeyPath: KeyPath<AVQueuePlayer, CMTime?> = \.currentItem?.duration
-            cancellable = player.publisher(for: durationKeyPath).sink { duration in
-                guard let duration = duration else { return }
-                guard duration.isNumeric else { return }
-                self.publisher.send(duration.seconds)
-            }
-        }
-        
-        deinit {
-            cancellable?.cancel()
-        }
-    }
 }
 
