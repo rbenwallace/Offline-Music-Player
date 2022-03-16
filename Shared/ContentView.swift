@@ -1,90 +1,55 @@
 //
 //  ContentView.swift
-//  Shared
+//  Offline Cloud Music Player
 //
-//  Created by Ben Wallace on 2022-03-15.
+//  Created by Ben Wallace on 2021-11-11.
 //
 
 import SwiftUI
 import CoreData
 
 struct ContentView: View {
+    @ObservedObject var model = Model.shared
     @Environment(\.managedObjectContext) private var viewContext
-
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-        animation: .default)
-    private var items: FetchedResults<Item>
-
-    var body: some View {
-        NavigationView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                    } label: {
-                        Text(item.timestamp!, formatter: itemFormatter)
-                    }
-                }
-                .onDelete(perform: deleteItems)
+    @State var selection = 0
+    
+    var body: some View{
+        TabView(selection: $selection) {
+            ZStack() {
+                LibraryView()
+                    .environmentObject(model)
             }
-            .toolbar {
-#if os(iOS)
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-#endif
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
+            .tabItem {
+                VStack {
+                    Image(systemName: "music.note")
+                    Text("Songs")
                 }
             }
-            Text("Select an item")
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            .tag(0)
+            
+            ZStack {
+                PlaylistView()
+                    .environmentObject(model)
             }
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            .tabItem {
+                VStack {
+                    Image(systemName: "music.note.list")
+                    Text("Playlists")
+                }
             }
+            .tag(1)
+            
+            ZStack {
+                QueueView()
+                    .environmentObject(model)
+            }
+            .tabItem {
+                VStack {
+                    Image(systemName: "music.note.list")
+                    Text("Queue")
+                }
+            }
+            .tag(2)
         }
-    }
-}
-
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
