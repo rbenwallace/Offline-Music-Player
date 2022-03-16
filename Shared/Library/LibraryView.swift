@@ -29,30 +29,28 @@ struct LibraryView: View {
             NavigationView {
                 List {
                     ForEach(songs) { song in
-                        NavigationLink(destination: {
-                            PlayerView(songId: song.id!, fromPlaylist: false, songTitle: song.title!)
-                                            .environmentObject(model)
-                        }, label: {
-                            SongCardView(showingAlert: $showingAlert, textEntered: $textEntered, updateSong: $updateSong, song: song)
-                                .environmentObject(model)
-                        })
-                        .swipeActions(edge: .leading) {
-                            Button {
-                                model.queuedSongs.append(song)
-                                print("Queue Length: ", model.queuedSongs.count)
-                            } label: {
-                                Label("Add to queue", systemImage: "plus.circle")
+                        SongCardView(showingAlert: $showingAlert, textEntered: $textEntered, updateSong: $updateSong, song: song)
+                            .environmentObject(model)
+                            .onTapGesture {
+                                self.model.playSong(id: song.id!, fromPlaylist: false, songTitle: song.title!)
                             }
-                            .tint(.green)
-                        }
-                        .swipeActions(edge: .trailing) {
-                            Button {
-                                deleteSong(song: song)
-                            } label: {
-                                Label("Delete Song", systemImage: "minus.circle")
+                            .swipeActions(edge: .leading) {
+                                Button {
+                                    model.queuedSongs.append(song)
+                                    print("Queue Length: ", model.queuedSongs.count)
+                                } label: {
+                                    Label("Add to queue", systemImage: "plus.circle")
+                                }
+                                .tint(.green)
                             }
-                            .tint(.red)
-                        }
+                            .swipeActions(edge: .trailing) {
+                                Button {
+                                    deleteSong(song: song)
+                                } label: {
+                                    Label("Delete Song", systemImage: "minus.circle")
+                                }
+                                .tint(.red)
+                            }
                     }
                     .onDelete(perform: deleteItems)
                 }
