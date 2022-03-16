@@ -19,8 +19,16 @@ struct SongCardView: View {
     
     var body: some View {
         HStack {
-            Text(song.unwrappedTitle)
-            
+            Image(uiImage: UIImage(named: "cover_pink") ?? UIImage())
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 100, height: 100)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+            VStack(alignment: .leading) {
+                Text(song.unwrappedTitle)
+                Text("Unknown")
+                    .font(.caption)
+            }
             Spacer()
             
             Menu {
@@ -31,6 +39,20 @@ struct SongCardView: View {
                 Label("", systemImage: "ellipsis.circle")
             }
         }
+        
+//        HStack {
+//            Text(song.unwrappedTitle)
+//
+//            Spacer()
+//
+//            Menu {
+//                Button(action: { editSongTitle() }, label: { Text("Edit Song Title") })
+//                Button(action: { shareSong() }, label: { Text("Share Song") })
+//                Button("Cancel", action: cancelMenu)
+//            } label: {
+//                Label("", systemImage: "ellipsis.circle")
+//            }
+//        }
     }
     
     func editSongTitle() {
