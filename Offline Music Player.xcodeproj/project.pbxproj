@@ -71,7 +71,7 @@
 		E83C65F927E1AB41004605A0 /* QueueView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueueView.swift; sourceTree = "<group>"; };
 		E83C65FA27E1AB41004605A0 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		E83C65FB27E1AB41004605A0 /* ItemObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemObserver.swift; sourceTree = "<group>"; };
-		E83C660927E1ACD3004605A0 /* Offline-Music-Player--iOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Offline-Music-Player--iOS--Info.plist"; sourceTree = "<group>"; };
+		E83C660927E1ACD3004605A0 /* Offline-Music-Player--iOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Offline-Music-Player--iOS--Info.plist"; sourceTree = "<group>"; };
 		E8E111EE27E09FE800D96111 /* Shared.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Shared.xcdatamodel; sourceTree = "<group>"; };
 		E8E111EF27E09FE800D96111 /* Offline_Music_PlayerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Offline_Music_PlayerApp.swift; sourceTree = "<group>"; };
 		E8E111F027E09FE900D96111 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -124,12 +124,87 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E83C660A27E1AF16004605A0 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				E83C65EF27E1AB41004605A0 /* AudioPlayerManager.swift */,
+				E83C65F427E1AB41004605A0 /* PlayerView.swift */,
+			);
+			path = Player;
+			sourceTree = "<group>";
+		};
+		E83C660B27E1AF20004605A0 /* Playlist */ = {
+			isa = PBXGroup;
+			children = (
+				E83C65F027E1AB41004605A0 /* AddPlaylistSongsView.swift */,
+				E83C65F827E1AB41004605A0 /* PlaylistView.swift */,
+			);
+			path = Playlist;
+			sourceTree = "<group>";
+		};
+		E83C660C27E1AF2D004605A0 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				E83C65F227E1AB41004605A0 /* PlaylistSongsView.swift */,
+				E83C65F627E1AB41004605A0 /* LibraryView.swift */,
+				E83C65F527E1AB41004605A0 /* SmartSongsView.swift */,
+				E83C65F927E1AB41004605A0 /* QueueView.swift */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
+		E83C660D27E1AF3C004605A0 /* Song */ = {
+			isa = PBXGroup;
+			children = (
+				E83C65F727E1AB41004605A0 /* SongCardView.swift */,
+			);
+			path = Song;
+			sourceTree = "<group>";
+		};
+		E83C660E27E1AF58004605A0 /* Observer */ = {
+			isa = PBXGroup;
+			children = (
+				E83C65FB27E1AB41004605A0 /* ItemObserver.swift */,
+			);
+			path = Observer;
+			sourceTree = "<group>";
+		};
+		E83C660F27E1AF6C004605A0 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				E8E111ED27E09FE800D96111 /* Database.xcdatamodeld */,
+				E8E1123827E1A2AF00D96111 /* Song+CoreDataClass.swift */,
+				E8E1123927E1A2AF00D96111 /* Song+CoreDataProperties.swift */,
+				E8E1123A27E1A2AF00D96111 /* Playlist+CoreDataClass.swift */,
+				E8E1123B27E1A2AF00D96111 /* Playlist+CoreDataProperties.swift */,
+				E8E111F127E09FE900D96111 /* Persistence.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		E83C661027E1AF77004605A0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				E83C65FA27E1AB41004605A0 /* Model.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		E83C661127E1B05C004605A0 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				E83C65F327E1AB41004605A0 /* CustonAlert.swift */,
+				E83C65F127E1AB41004605A0 /* TimeFormat.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
 		E8E111E727E09FE800D96111 = {
 			isa = PBXGroup;
 			children = (
-				E83C660927E1ACD3004605A0 /* Offline-Music-Player--iOS--Info.plist */,
 				E8E111EC27E09FE800D96111 /* Shared */,
 				E8E111FE27E09FE900D96111 /* macOS */,
+				E83C660927E1ACD3004605A0 /* Offline-Music-Player--iOS--Info.plist */,
 				E8E1120727E09FE900D96111 /* Tests iOS */,
 				E8E1121327E09FE900D96111 /* Tests macOS */,
 				E8E111F827E09FE900D96111 /* Products */,
@@ -139,28 +214,17 @@
 		E8E111EC27E09FE800D96111 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				E83C65F027E1AB41004605A0 /* AddPlaylistSongsView.swift */,
-				E83C65EF27E1AB41004605A0 /* AudioPlayerManager.swift */,
-				E83C65F327E1AB41004605A0 /* CustonAlert.swift */,
-				E83C65FB27E1AB41004605A0 /* ItemObserver.swift */,
-				E83C65F627E1AB41004605A0 /* LibraryView.swift */,
-				E83C65FA27E1AB41004605A0 /* Model.swift */,
-				E83C65F427E1AB41004605A0 /* PlayerView.swift */,
-				E83C65F227E1AB41004605A0 /* PlaylistSongsView.swift */,
-				E83C65F827E1AB41004605A0 /* PlaylistView.swift */,
-				E83C65F927E1AB41004605A0 /* QueueView.swift */,
-				E83C65F527E1AB41004605A0 /* SmartSongsView.swift */,
-				E83C65F727E1AB41004605A0 /* SongCardView.swift */,
-				E83C65F127E1AB41004605A0 /* TimeFormat.swift */,
-				E8E1123827E1A2AF00D96111 /* Song+CoreDataClass.swift */,
-				E8E1123927E1A2AF00D96111 /* Song+CoreDataProperties.swift */,
-				E8E1123A27E1A2AF00D96111 /* Playlist+CoreDataClass.swift */,
-				E8E1123B27E1A2AF00D96111 /* Playlist+CoreDataProperties.swift */,
 				E8E111EF27E09FE800D96111 /* Offline_Music_PlayerApp.swift */,
 				E8E111F027E09FE900D96111 /* ContentView.swift */,
-				E8E111F127E09FE900D96111 /* Persistence.swift */,
+				E83C661027E1AF77004605A0 /* Model */,
+				E83C660E27E1AF58004605A0 /* Observer */,
+				E83C660D27E1AF3C004605A0 /* Song */,
+				E83C660C27E1AF2D004605A0 /* Library */,
+				E83C660B27E1AF20004605A0 /* Playlist */,
+				E83C660A27E1AF16004605A0 /* Player */,
+				E83C661127E1B05C004605A0 /* Helper */,
+				E83C660F27E1AF6C004605A0 /* Storage */,
 				E8E111F227E09FE900D96111 /* Assets.xcassets */,
-				E8E111ED27E09FE800D96111 /* Database.xcdatamodeld */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
