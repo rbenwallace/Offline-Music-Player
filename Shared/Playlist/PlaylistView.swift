@@ -18,7 +18,6 @@ struct PlaylistView: View {
     private var playlists: FetchedResults<Playlist>
     @State var song1 = false
     @State private var isImporting = false
-    let playerManager = AudioPlayerManager()
     @State private var textEntered = ""
     @State private var showingAlert = false
     @State private var updateSong = Song()

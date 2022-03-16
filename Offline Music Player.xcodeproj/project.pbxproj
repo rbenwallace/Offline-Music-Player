@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E83C65FC27E1AB41004605A0 /* AudioPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65EF27E1AB41004605A0 /* AudioPlayerManager.swift */; };
 		E83C65FD27E1AB41004605A0 /* AddPlaylistSongsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65F027E1AB41004605A0 /* AddPlaylistSongsView.swift */; };
 		E83C65FE27E1AB41004605A0 /* TimeFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65F127E1AB41004605A0 /* TimeFormat.swift */; };
 		E83C65FF27E1AB41004605A0 /* PlaylistSongsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65F227E1AB41004605A0 /* PlaylistSongsView.swift */; };
@@ -60,7 +59,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		E83C65EF27E1AB41004605A0 /* AudioPlayerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayerManager.swift; sourceTree = "<group>"; };
 		E83C65F027E1AB41004605A0 /* AddPlaylistSongsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddPlaylistSongsView.swift; sourceTree = "<group>"; };
 		E83C65F127E1AB41004605A0 /* TimeFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeFormat.swift; sourceTree = "<group>"; };
 		E83C65F227E1AB41004605A0 /* PlaylistSongsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistSongsView.swift; sourceTree = "<group>"; };
@@ -131,7 +129,6 @@
 		E83C660A27E1AF16004605A0 /* Player */ = {
 			isa = PBXGroup;
 			children = (
-				E83C65EF27E1AB41004605A0 /* AudioPlayerManager.swift */,
 				E83C65F427E1AB41004605A0 /* PlayerView.swift */,
 			);
 			path = Player;
@@ -451,7 +448,6 @@
 				E83C660727E1AB41004605A0 /* Model.swift in Sources */,
 				E83C660327E1AB41004605A0 /* LibraryView.swift in Sources */,
 				E83C65FF27E1AB41004605A0 /* PlaylistSongsView.swift in Sources */,
-				E83C65FC27E1AB41004605A0 /* AudioPlayerManager.swift in Sources */,
 				E8E1121C27E09FE900D96111 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
