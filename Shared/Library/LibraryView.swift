@@ -29,11 +29,8 @@ struct LibraryView: View {
             NavigationView {
                 List {
                     ForEach(songs) { song in
-                        SongCardView(showingAlert: $showingAlert, textEntered: $textEntered, updateSong: $updateSong, song: song)
+                        SongCardView(showingAlert: $showingAlert, textEntered: $textEntered, updateSong: $updateSong, song: song, fromPlaylist: false)
                             .environmentObject(model)
-                            .onTapGesture {
-                                self.model.playSong(id: song.id!, fromPlaylist: false, songTitle: song.title!)
-                            }
                             .swipeActions(edge: .leading) {
                                 Button {
                                     model.queuedSongs.append(song)
@@ -78,8 +75,15 @@ struct LibraryView: View {
             ) { result in
                 if case .success = result {
                     do {
+                        
                         let aURL: URL = try result.get().first!
                         if aURL.startAccessingSecurityScopedResource() {
+                            if !FileManager.default.fileExists(atPath: aURL.path) {
+                                var error: NSError?
+                                // Force file to download if from Cloud platform
+                                NSFileCoordinator().coordinate(
+                                    readingItemAt: aURL, options: .forUploading, error: &error) { _ in }
+                            }
                             addItem(songUrl: aURL)
                             aURL.stopAccessingSecurityScopedResource()
                         }
