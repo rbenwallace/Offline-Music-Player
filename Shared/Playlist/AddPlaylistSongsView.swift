@@ -94,6 +94,7 @@ struct MultipleSelectionRow: View {
                     Image(systemName: "checkmark")
                 }
             }
+            .foregroundColor(.white)
         }
     }
 }

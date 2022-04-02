@@ -1,97 +1,127 @@
 //
-//  Alert.swift
-//  Offline Cloud Music Player
+//  CustomAlert.swift
+//  Offline Music Player (iOS)
 //
-//  Created by Ben Wallace on 2022-02-22.
+//  This class represents a pop up alert that lets the user either create a playlist or rename s song
 //
 
 import SwiftUI
 import CoreData
 
 struct CustomAlert: View {
+    @EnvironmentObject var model: Model
+    
+    // persistent storage context
     @Environment(\.managedObjectContext) private var viewContext
-    @Binding var textEntered: String
-    @Binding var showingAlert: Bool
-    @Binding var song: Song
-    public var isPlaylist: Bool
+    
+    // boolean of whether the alert was triggered from a playlist
+    private var isPlaylist: Bool
+    
+    // binding string of the text entered, which will be initially displayed to the user in the alert
+    @Binding private var textEntered: String
+    
+    // binding boolean of whether this current view should be displayed
+    @Binding private var showingAlert: Bool
+    
+    // binding Song variable whos title is to be renamed
+    @Binding private var updateSong: Song
+    
+    // constructor for call from PlaylistView which initializes local variables
+    init(isPlaylist: Bool, textEntered: Binding<String>, showingAlert: Binding<Bool>){
+        self.isPlaylist = isPlaylist
+        self._textEntered = textEntered
+        self._showingAlert = showingAlert
+        self._updateSong = Binding.constant(Song())
+    }
+    
+    // constructor for call from LibraryView which initializes local variables
+    init(isPlaylist: Bool, textEntered: Binding<String>, showingAlert: Binding<Bool>, updateSong: Binding<Song>){
+        self.isPlaylist = isPlaylist
+        self._textEntered = textEntered
+        self._showingAlert = showingAlert
+        self._updateSong = updateSong
+    }
     
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
-                .fill(Color.white)
-            VStack {
-                Divider()
-                
-                Text(isPlaylist ? "Playlist Name" : "Rename File")
-                    .font(.title)
-                    .foregroundColor(.black)
-                
-                Divider()
-                
-                TextField("Enter text", text: $textEntered)
-                    .textCase(.uppercase)
-                    .padding(5)
-                    .background(Color.gray.opacity(0.2))
-                    .foregroundColor(.black)
-                    .padding(.horizontal, 20)
+                .fill(Color(.systemBackground))
+            ZStack {
+                // area that allows user to input text to fulfill alert
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Color.white)
+                VStack {
+                    Divider()
                     
+                    Text(isPlaylist ? "Playlist Name" : "Rename File")
+                        .font(.title)
+                        .foregroundColor(.black)
                     
-                Divider()
-                
-                HStack(spacing: 80) {
-                    Button("Cancel") {
-                        self.showingAlert.toggle()
-                    }
+                    Divider()
                     
-                    Button("Ok") {
-                        if self.textEntered != ""{
-                            if isPlaylist {
-                                addItem(playlistName: textEntered)
-                            } else {
-                                renameSong(inSong: song, newTitle: textEntered)
-                                song = Song()
+                    TextField("Enter text", text: $textEntered)
+                        .padding(5)
+                        .background(Color.gray.opacity(0.2))
+                        .foregroundColor(.black)
+                        .padding(.horizontal, 20)
+                        
+                    Divider()
+                    
+                    // options which let user either cancel the alert, or complet it with the text they entered
+                    HStack(spacing: 80) {
+                        Button("Cancel") {
+                            self.showingAlert.toggle()
+                        }
+                        
+                        Button("Ok") {
+                            if self.textEntered != ""{
+                                if isPlaylist {
+                                    addPlaylist(playlistName: textEntered)
+                                } else {
+                                    renameSong(newTitle: textEntered)
+                                    //self.updateSong = Song()
+                                }
                             }
                             self.textEntered = ""
+                            self.showingAlert.toggle()
                         }
-                        self.showingAlert.toggle()
                     }
+                    .padding(30)
                 }
-                .padding(30)
             }
+            .frame(width: 300, height: 200)
         }
-        .frame(width: 300, height: 200)
     }
     
-    func getDocumentsDirectory() -> URL {
-        // find all possible documents directories for this user
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-
-        // just send back the first one, which ought to be the only one
-        return paths[0]
-    }
-    
-    private func renameSong(inSong: Song, newTitle: String) {
+    // renames inputted song in app's document directory and in the database
+    private func renameSong(newTitle: String) {
         do {
-            try FileManager.default.moveItem(at: getDocumentsDirectory().appendingPathComponent(song.title!), to: getDocumentsDirectory().appendingPathComponent(textEntered + song.title![song.title!.lastIndex(of: ".")!...]))
-            song.title = textEntered + song.title![song.title!.lastIndex(of: ".")!...]
+            // renames song in app's document directory
+            try FileManager.default.moveItem(at: Helper.getDocumentsDirectory().appendingPathComponent(self.updateSong.title!), to: Helper.getDocumentsDirectory().appendingPathComponent(textEntered + self.updateSong.title![self.updateSong.title!.lastIndex(of: ".")!...]))
+            
+            // renames song in database
+            self.updateSong.title = textEntered + self.updateSong.title![self.updateSong.title!.lastIndex(of: ".")!...]
             try viewContext.save()
-        } catch let error as NSError {
-            print(error)
+        } catch {
+            print("Could not remame song: \(error.localizedDescription)")
         }
     }
 
-    private func addItem(playlistName: String) {
+    // creates and saves new playlist
+    private func addPlaylist(playlistName: String) {
         withAnimation {
+            // initializes new playlist's attributes
             let newItem = Playlist(context: viewContext)
             newItem.timestamp = Date()
             newItem.title = playlistName
+            
+            // saves new playlist in database
             do {
                 try viewContext.save()
             } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                // if a playlist already exists with the same title delete the newly created playlist
+                viewContext.delete(newItem)
+                print("Playlist could not be added: \(error.localizedDescription)")
             }
         }
     }
