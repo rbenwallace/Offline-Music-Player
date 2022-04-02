@@ -16,35 +16,32 @@ struct PlaylistView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \Playlist.timestamp, ascending: true)],
         animation: .default)
     private var playlists: FetchedResults<Playlist>
-    @State var song1 = false
+    @State private var showingAlert = false
     @State private var isImporting = false
     @State private var textEntered = ""
-    @State private var showingAlert = false
-    @State private var updateSong = Song()
-
+    
     var body: some View {
-        if showingAlert == true {
-            CustomAlert(textEntered: $textEntered, showingAlert: $showingAlert, song: $updateSong, isPlaylist: true)
-                .environment(\.managedObjectContext, viewContext)
+        if self.showingAlert == true {
+            CustomAlert(isPlaylist: true, textEntered: $textEntered, showingAlert: self.$showingAlert)
         } else{
             NavigationView {
                 List {
                     ForEach(playlists) { playlist in
-                        NavigationLink {
+                        NavigationLink(destination: {
                             if playlist.title != "Most Played"{
                                 PlaylistSongsView(playlist: playlist)
                                     .environmentObject(model)
                             } else {
-                                SmartSongsView(playlist.title!)
+                                SmartSongsView(playlistName: playlist.title!)
                                     .environmentObject(model)
                             }
-                        } label: {
-                            Text(playlist.title ?? "Unknown")
-                        }
+                        }, label: {
+                            PlaylistCardView(playlist: playlist)
+                        })
                     }
-                    .onDelete(perform: deleteItems)
+                    .onDelete(perform: deleteSongs)
                 }
-                .navigationTitle("Playlists")
+                .navigationBarTitle(Text("Playlists"), displayMode: .automatic)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         EditButton()
@@ -58,13 +55,11 @@ struct PlaylistView: View {
                     }
                     
                 }
-                Text("Select an item")
             }
-            .navigationViewStyle(StackNavigationViewStyle())
         }
     }
 
-    private func deleteItems(offsets: IndexSet) {
+    private func deleteSongs(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
                 if playlists[index].title != "Most Played"{
@@ -74,8 +69,7 @@ struct PlaylistView: View {
             do {
                 try viewContext.save()
             } catch {
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                print("Failed to delete playlist \(error.localizedDescription)")
             }
         }
     }
