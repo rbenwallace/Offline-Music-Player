@@ -2,12 +2,13 @@
 //  Persistence.swift
 //  Shared
 //
-//  Created by Ben Wallace on 2022-03-15.
+//  Persistent storage controller class for storing/deleting/updating entities in Core Data
 //
 
 import CoreData
 
 struct PersistenceController {
+    // shared persistence controller instance
     static let shared = PersistenceController()
 
     static var preview: PersistenceController = {
@@ -28,8 +29,10 @@ struct PersistenceController {
         return result
     }()
 
+    // persistence container
     let container: NSPersistentContainer
 
+    // initializes container with Core Data database
     init(inMemory: Bool = false) {
         container = NSPersistentContainer(name: "Database")
         if inMemory {
