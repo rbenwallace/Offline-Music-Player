@@ -13,7 +13,7 @@ class Model: ObservableObject {
     static let shared = Model()
 
     // Audio player
-    @Published var audioPlayer: AVQueuePlayer
+    var audioPlayer: AVQueuePlayer
     
     // Published array of songs used to display playlist songs in PlaylistSongsView
     @Published var songs = [Song]()
