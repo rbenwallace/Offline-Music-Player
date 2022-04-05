@@ -111,16 +111,16 @@ struct CustomAlert: View {
     private func addPlaylist(playlistName: String) {
         withAnimation {
             // initializes new playlist's attributes
-            let newItem = Playlist(context: viewContext)
-            newItem.timestamp = Date()
-            newItem.title = playlistName
+            let newPlaylist = Playlist(context: viewContext)
+            newPlaylist.timestamp = Date()
+            newPlaylist.title = playlistName
             
             // saves new playlist in database
             do {
                 try viewContext.save()
             } catch {
                 // if a playlist already exists with the same title delete the newly created playlist
-                viewContext.delete(newItem)
+                viewContext.delete(newPlaylist)
                 print("Playlist could not be added: \(error.localizedDescription)")
             }
         }
