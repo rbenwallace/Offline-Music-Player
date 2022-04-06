@@ -46,8 +46,14 @@ class CurrentSongObserver {
             }
             // if for some reason the new current playing song is invalid or cant be played, skip to the next song
             else {
+                // if a song does not play for some reason but there are more songs in the playlist, skip it
                 if player.items().count > 0 {
                     player.advanceToNextItem()
+                } else {
+                    // there are no more songs so the player views should disappear
+                    Model.shared.isPlaying = false
+                    Model.shared.currentSong = nil
+                    Model.shared.isPlayerViewPresented = false
                 }
             }
         }
