@@ -18,6 +18,9 @@ struct PlayerView: View {
     // State TimeInterval variable which is updated by the view's receiver and populates the time slider's duration time for the current playing song
     @State private var currentDuration: TimeInterval = 0
     
+    // keeps track of the amount the view has been dragged
+    @State private var offset = CGSize.zero
+    
     var body: some View {
         // only displays the view if there is a song currently playing
         if self.model.currentSong != nil{
@@ -186,6 +189,32 @@ struct PlayerView: View {
                 LinearGradient(gradient: Gradient(colors: [Color(.systemPink), .black]), startPoint: .top, endPoint: .bottom)
             )
             .edgesIgnoringSafeArea(.all)
+            // moves the view down as it is dragged down by the user
+            .offset(x: 0, y: self.offset.height)
+            // makes the view fade as it gets dragged closer to the bottom
+            .opacity(4 - Double(offset.height/100))
+            // handles downward drag gesture to exit the view
+            .gesture(
+                DragGesture()
+                    // If the view is being dragged down, update the offset value
+                    .onChanged { gesture in
+                        if gesture.translation.height > .zero {
+                            self.offset = gesture.translation
+                        }
+                    }
+                
+                    // When the drag gesture has been completed, update the isPlayerViewPresented variable if the view was dragged down far enough or otherwise reset the offset to 0
+                    .onEnded { _ in
+                        if offset.height > 200 {
+                            self.model.isPlayerViewPresented = false
+                        }
+                        else {
+                            withAnimation {
+                                self.offset = .zero
+                            }
+                        }
+                    }
+            )
         }
     }
     
