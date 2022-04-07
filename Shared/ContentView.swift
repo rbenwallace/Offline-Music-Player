@@ -1,55 +1,105 @@
 //
 //  ContentView.swift
-//  Offline Cloud Music Player
+//  Offline Music Player (iOS)
 //
-//  Created by Ben Wallace on 2021-11-11.
+//  The first view that is loaded by the apps main function, which controls the menu tab selections and the Player views 
 //
 
 import SwiftUI
-import CoreData
+import AVKit
 
 struct ContentView: View {
+    // creates environment variable to be used throughout the app
     @ObservedObject var model = Model.shared
+    
+    // persistent storage context
     @Environment(\.managedObjectContext) private var viewContext
-    @State var selection = 0
+    
+    // Set reccuring timer to constantly check and update the model's currentSong property used by BarPlayerView to display the current song playing
+    private let timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
+    
+    // State Int to track of the currently selected app menu tab
+    @State private var tab = 0
     
     var body: some View{
-        TabView(selection: $selection) {
-            ZStack() {
-                LibraryView()
-                    .environmentObject(model)
-            }
-            .tabItem {
-                VStack {
-                    Image(systemName: "music.note")
-                    Text("Songs")
+        ZStack {
+            // App's menu tab at the bottom of the screen
+            TabView(selection: $tab) {
+                // Library tab
+                ZStack() {
+                    LibraryView()
+                        .environmentObject(model)
                 }
+                .tabItem {
+                    VStack {
+                        Image(systemName: "music.note")
+                        Text("Songs")
+                    }
+                }
+                .tag(0)
+                
+                // Playlist Tab
+                ZStack {
+                    PlaylistView()
+                        .environmentObject(model)
+                }
+                .tabItem {
+                    VStack {
+                        Image(systemName: "music.note.list")
+                        Text("Playlists")
+                    }
+                }
+                .tag(1)
+                
+                // Queue tab
+                ZStack {
+                    QueueView()
+                        .environmentObject(model)
+                }
+                .tabItem {
+                    VStack {
+                        Image(systemName: "music.note.list")
+                        Text("Queue")
+                    }
+                }
+                .tag(2)
             }
-            .tag(0)
+            .padding(.top, 5)
             
-            ZStack {
-                PlaylistView()
-                    .environmentObject(model)
-            }
-            .tabItem {
-                VStack {
-                    Image(systemName: "music.note.list")
-                    Text("Playlists")
+            // Displays either BarPlayerView or PlayerView when a song is being played
+            Group {
+                // displays the full screen player, PlayerView
+                if self.model.isPlayerViewPresented {
+                    PlayerView()
+                        .environmentObject(model)
+                }
+                // Displays the minimized player BarPlayerView, and when pressed displays the full screen PlayerView
+                else {
+                    BarPlayerView()
+                        .environmentObject(model)
+                        .onTapGesture {
+                            withAnimation(Animation.spring(response: 0.7, dampingFraction: 0.85)) {
+                                UIImpactFeedbackGenerator(style: .soft).impactOccurred(intensity: 0.7)
+                                self.model.isPlayerViewPresented.toggle()
+                            }
+                        }
+                        .padding(.bottom, 50)
                 }
             }
-            .tag(1)
-            
-            ZStack {
-                QueueView()
-                    .environmentObject(model)
-            }
-            .tabItem {
-                VStack {
-                    Image(systemName: "music.note.list")
-                    Text("Queue")
+            .zIndex(2.0)
+        }
+        // gives buttons and icons pink tint
+        .accentColor(.pink)
+        // receives each time the timer publshes in order to update the model's currentSong property if necessary
+        .onReceive(timer) { _ in
+            if self.model.audioPlayer.currentItem != nil {
+                let asset = self.model.audioPlayer.currentItem!.asset
+                if let urlAsset = asset as? AVURLAsset {
+                    if self.model.currentSong != urlAsset.url.lastPathComponent {
+                        self.model.currentSong = urlAsset.url.lastPathComponent
+                    }
                 }
             }
-            .tag(2)
         }
     }
 }
