@@ -19,8 +19,8 @@ class TimeObserver {
     // observer varaible to observe changes in the audio player's current song's playback time
     private var timeObservation: Any?
     
-    // keeps track of whether the player is paused or not
-    private var paused = false
+    // keeps track of whether the time bar is being manipulated
+    private var timeUpdating = false
     
     // constructor to store audio player reference and initialize time observer
     init(player: AVQueuePlayer) {
@@ -34,7 +34,7 @@ class TimeObserver {
             }
             
             // returns if audio player is paused
-            if self.paused {
+            if self.timeUpdating {
                 return
             }
             
@@ -50,8 +50,8 @@ class TimeObserver {
         }
     }
     
-    // updates the observers paused state when the audio player has paused
-    func pause(_ pause: Bool) {
-        self.paused = pause
+    // sets the observers timeUpdating value
+    func setTimeUpdating(timeUpdating: Bool) {
+        self.timeUpdating = timeUpdating
     }
 }
