@@ -59,12 +59,12 @@ struct SongCardView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 10))
                             .padding(.trailing, 5)
                         VStack(alignment: .leading) {
-                            if self.song.title! == self.model.currentSong{
+                            if (self.song.title != nil) && (self.song.title! == self.model.currentSong) {
                                 Text(self.song.title!)
                                     .foregroundColor(.pink)
                                     .lineLimit(2)
                             } else {
-                                Text(self.song.title!)
+                                Text(self.song.title ?? "Unkown Song")
                                     .foregroundColor(.white)
                                     .lineLimit(2)
                             }
