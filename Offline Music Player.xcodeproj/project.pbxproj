@@ -36,6 +36,7 @@
 		E814C8CF27F85AC800B9DB4A /* Playlist+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E814C8AA27F6A84800B9DB4A /* Playlist+CoreDataProperties.swift */; };
 		E814C8D027F85ACE00B9DB4A /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E111F127E09FE900D96111 /* Persistence.swift */; };
 		E814C8D127F85AEC00B9DB4A /* Database.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E8E111ED27E09FE800D96111 /* Database.xcdatamodeld */; };
+		E814C8D22801193500B9DB4A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E8E111F227E09FE900D96111 /* Assets.xcassets */; };
 		E83C65FD27E1AB41004605A0 /* AddPlaylistSongsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65F027E1AB41004605A0 /* AddPlaylistSongsView.swift */; };
 		E83C65FF27E1AB41004605A0 /* PlaylistSongsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65F227E1AB41004605A0 /* PlaylistSongsView.swift */; };
 		E83C660027E1AB41004605A0 /* CustonAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65F327E1AB41004605A0 /* CustonAlert.swift */; };
@@ -439,6 +440,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E814C8D22801193500B9DB4A /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
