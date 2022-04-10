@@ -58,7 +58,7 @@ struct ContentView: View {
                 }
                 .tabItem {
                     VStack {
-                        Image(systemName: "music.note.list")
+                        Image(systemName: "list.bullet")
                         Text("Queue")
                     }
                 }
@@ -83,7 +83,7 @@ struct ContentView: View {
                                 self.model.isPlayerViewPresented.toggle()
                             }
                         }
-                        .padding(.bottom, 50)
+                        .padding(.bottom, 49)
                 }
             }
             .zIndex(2.0)
@@ -92,8 +92,8 @@ struct ContentView: View {
         .accentColor(.pink)
         // receives each time the timer publshes in order to update the model's currentSong property if necessary
         .onReceive(timer) { _ in
-            if self.model.audioPlayer.currentItem != nil {
-                let asset = self.model.audioPlayer.currentItem!.asset
+            if self.model.getPlayerCurrentItem() != nil {
+                let asset = self.model.getPlayerCurrentItem()!.asset
                 if let urlAsset = asset as? AVURLAsset {
                     if self.model.currentSong != urlAsset.url.lastPathComponent {
                         self.model.currentSong = urlAsset.url.lastPathComponent

@@ -76,7 +76,7 @@ struct PlayerView: View {
                             }
                         
                         // represents the play/pause buttton
-                        Image(systemName: (model.isPlaying && (model.audioPlayer.currentItem != nil)) ? "pause.fill": "play.fill")
+                        Image(systemName: (model.isPlaying && (model.getPlayerCurrentItem() != nil)) ? "pause.fill": "play.fill")
                             .font(.system(size: 40))
                             .padding()
                             .padding(.horizontal, 20)
@@ -174,9 +174,9 @@ struct PlayerView: View {
                 // Listen out for the item observer publishing a change to whether the player has an item
                 .onReceive(model.currentSongObserver.publisher) { hasItem in
                     self.currentTime = 0
-                    if hasItem && self.model.audioPlayer.currentItem != nil {
-                        if self.model.audioPlayer.currentItem!.duration.isNumeric {
-                            self.currentDuration =  TimeInterval(self.model.audioPlayer.currentItem!.duration.seconds)
+                    if hasItem && self.model.getPlayerCurrentItem() != nil {
+                        if self.model.getPlayerCurrentItem()!.duration.isNumeric {
+                            self.currentDuration =  TimeInterval(self.model.getPlayerCurrentItem()!.duration.seconds)
                         }
                     } else {
                         self.currentDuration =  0
@@ -198,11 +198,10 @@ struct PlayerView: View {
                 DragGesture()
                     // If the view is being dragged down, update the offset value
                     .onChanged { gesture in
-                        if gesture.translation.height > .zero {
+                        if gesture.translation.height > CGSize(width: 0, height: 20).height {
                             self.offset = gesture.translation
                         }
                     }
-                
                     // When the drag gesture has been completed, update the isPlayerViewPresented variable if the view was dragged down far enough or otherwise reset the offset to 0
                     .onEnded { _ in
                         if offset.height > 200 {
@@ -220,30 +219,35 @@ struct PlayerView: View {
     
     // actions that occur when the view is presented to the user
     private func loadData(){
-        if self.model.audioPlayer.currentItem != nil {
+        if self.model.getPlayerCurrentItem() != nil {
             // populates the time bar slider's duration with the duration of the current playing song
-            if self.model.audioPlayer.currentItem!.duration.isNumeric {
-                self.currentDuration =  TimeInterval(self.model.audioPlayer.currentItem!.duration.seconds)
+            if self.model.getPlayerCurrentItem()!.duration.isNumeric {
+                self.currentDuration =  TimeInterval(self.model.getPlayerCurrentItem()!.duration.seconds)
             }
             
             // populates the time bar slider's current time with the current playback time of the current playing song
-            if self.model.audioPlayer.currentItem!.currentTime().isNumeric {
-                self.currentTime =  TimeInterval(self.model.audioPlayer.currentItem!.currentTime().seconds)
+            if self.model.getPlayerCurrentItem()!.currentTime().isNumeric {
+                self.currentTime =  TimeInterval(self.model.getPlayerCurrentItem()!.currentTime().seconds)
             }
         }
     }
     
+    // Handles the time bar slider being manipulated 
     private func timeSliderUpdated(updateStarted: Bool) {
+        // makes sure the time bar slider manipulation does not offset the view
+        if self.offset.height != .zero {
+            withAnimation {
+                self.offset = .zero
+            }
+        }
+        
         if updateStarted {
             // Informs the timeObserver that the time slider is being updated and to temporarily stop sending time updates
             self.model.timeObserver.setTimeUpdating(timeUpdating: true)
         }
         else {
-            // The time slider update is complete and the audio player must now seek to the new current time
-            self.model.audioPlayer.seek(to: CMTime(seconds: currentTime, preferredTimescale: 600)) { _ in
-                // Informs the timeObserver that the time slider is done updating and to continue sending time updates
-                self.model.timeObserver.setTimeUpdating(timeUpdating: false)
-            }
+            // time bar slider update has been completed so audio player seeks to new current time and timeObserver returns to publishing time updates
+            self.model.playerSeek(currentTime: currentTime)
         }
     }
 }

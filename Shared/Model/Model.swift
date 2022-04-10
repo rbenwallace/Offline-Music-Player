@@ -13,7 +13,7 @@ class Model: ObservableObject {
     static let shared = Model()
 
     // Audio player
-    var audioPlayer: AVQueuePlayer
+    private var audioPlayer: AVQueuePlayer
     
     // Published array of songs used to display playlist songs in PlaylistSongsView
     @Published var songs = [Song]()
@@ -56,6 +56,20 @@ class Model: ObservableObject {
         self.audioPlayer = AVQueuePlayer()
         self.timeObserver = TimeObserver(player: AVQueuePlayer())
         self.currentSongObserver = CurrentSongObserver(player: AVQueuePlayer())
+    }
+    
+    // returns the audio player's current item
+    func getPlayerCurrentItem() -> AVPlayerItem? {
+        return self.audioPlayer.currentItem
+    }
+    
+    // performs seek on the audio player's current playing item
+    func playerSeek(currentTime: TimeInterval) {
+        // The time slider update is complete and the audio player must now seek to the new current time
+        self.audioPlayer.seek(to: CMTime(seconds: currentTime, preferredTimescale: 600)) { _ in
+            // Informs the timeObserver that the time slider is done updating and to continue sending time updates
+            self.timeObserver.setTimeUpdating(timeUpdating: false)
+        }
     }
     
     // Updates audioPlayer's queue to remove songs that have been deleted from the database
