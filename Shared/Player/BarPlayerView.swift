@@ -22,14 +22,14 @@ struct BarPlayerView: View {
                     Image(uiImage: UIImage(named: "song_cover") ?? UIImage())
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 70, height: 70)
+                        .frame(width: 60, height: 60)
                         .padding()
                     
                     // Displays the title of the current song along with its author
                     VStack(alignment: .leading) {
                         Text(self.model.currentSong ?? "")
                             .font(.headline)
-                            .lineLimit(2)
+                            .lineLimit(1)
                         Text("Unknown")
                             .font(.caption)
                             .foregroundColor(.gray)
