@@ -40,13 +40,10 @@ class Model: ObservableObject {
     @Published var currentSongObserver: CurrentSongObserver
     
     // Published Array of songs which represents the current playlist being played
-    @Published var playlistSongs = [Song]()
+    @Published var playlistSongs = [String]()
     
     // Array of songs used to popular the audio player when a song from a new playlist/library is played
     private var playerSongs = [AVPlayerItem]()
-    
-    // Keeps track of the index of the current song playing in the playlistSongs array
-    private var currentSongIndex: Int = 0
     
     // Published boolean to determine whether or not the playerView should be presented
     @Published var isPlayerViewPresented = false
@@ -63,6 +60,17 @@ class Model: ObservableObject {
         return self.audioPlayer.currentItem
     }
     
+    // for testing only
+    func testSeek(currentTime: TimeInterval) {
+        // The time slider update is complete and the audio player must now seek to the new current time
+        self.audioPlayer.seek(to: CMTime(seconds: currentTime, preferredTimescale: 600))
+    }
+    
+    // for testing only
+    func appendPlayerItem(title: String) {
+        playerSongs.append(AVPlayerItem(url: Helper.getDocumentsDirectory().appendingPathComponent(title)))
+    }
+    
     // performs seek on the audio player's current playing item
     func playerSeek(currentTime: TimeInterval) {
         // The time slider update is complete and the audio player must now seek to the new current time
@@ -75,6 +83,20 @@ class Model: ObservableObject {
     // Updates audioPlayer's queue to remove songs that have been deleted from the database
     func deleteSong(deleteSong: String)  {
         if currentSong != nil {
+            // updates currentSong index depending on where in the queue the song was deleted
+            if let idx = playlistSongs.firstIndex(where: { $0 == deleteSong }) {
+                // saves current song index in playlistSongs array
+                let currentSongIndex = playlistSongs.count - audioPlayer.items().count
+                
+                // skips to next song if current song playing is being deleted
+                if currentSongIndex == idx {
+                    self.audioPlayer.advanceToNextItem()
+                }
+                
+                // removes the song from playlistSongs array
+                self.playlistSongs.remove(at: idx)
+            }
+            
             let deleted: [String] = [deleteSong]
             var removeArr: [AVPlayerItem] = []
             
@@ -90,18 +112,6 @@ class Model: ObservableObject {
             // removes the desired songs from the queue
             for removeSong in removeArr {
                 self.audioPlayer.remove(removeSong)
-            }
-            
-            // updates currentSong index depending on where in the queue the song was deleted
-            if let idx = playlistSongs.firstIndex(where: { $0.title! == deleteSong }) {
-                if self.currentSongIndex > idx {
-                    self.currentSongIndex = self.currentSongIndex - 1
-                } else if self.currentSongIndex == idx {
-                    self.audioPlayer.advanceToNextItem()
-                }
-                
-                // removes the song from playlistSongs array
-                self.playlistSongs.remove(at: idx)
             }
         }
     }
@@ -123,6 +133,9 @@ class Model: ObservableObject {
             // audioPlayer observers for the view components inside PlayerView are reinitialized
             self.timeObserver = TimeObserver(player: audioPlayer)
             self.currentSongObserver = CurrentSongObserver(player: audioPlayer)
+            
+            // sets is playing state to true
+            self.isPlaying = true
             
             // AVAudioSession is initialized
             try AVAudioSession.sharedInstance().setCategory(.playback)
@@ -160,17 +173,17 @@ class Model: ObservableObject {
             if audioPlayer.items().count != 0 {
                 // inserts the current playing song to the front of the queue
                 let diff = playlistSongs.count - audioPlayer.items().count
-                let avSong = AVPlayerItem(url: Helper.getDocumentsDirectory().appendingPathComponent(playlistSongs[diff].title!))
+                let avSong = AVPlayerItem(url: Helper.getDocumentsDirectory().appendingPathComponent(playlistSongs[diff]))
                 audioPlayer.insert(avSong, after: audioPlayer.items()[0])
                 
                 // if the current song is not the first song in the playlist then add the song prior to it in playlistSongs to the front of the queue
                 if diff != 0 {
-                    let avSong2 = AVPlayerItem(url: Helper.getDocumentsDirectory().appendingPathComponent(playlistSongs[diff-1].title!))
+                    let avSong2 = AVPlayerItem(url: Helper.getDocumentsDirectory().appendingPathComponent(playlistSongs[diff-1]))
                     audioPlayer.insert(avSong2, after: audioPlayer.items()[0])
                 }
             } else {
                 // inserts the last song in the playlist
-                let avSong = AVPlayerItem(url: Helper.getDocumentsDirectory().appendingPathComponent(playlistSongs[-1].title!))
+                let avSong = AVPlayerItem(url: Helper.getDocumentsDirectory().appendingPathComponent(playlistSongs[-1]))
                 audioPlayer.insert(avSong, after: nil)
             }
             // audioPlayer resumess playing audio
@@ -216,15 +229,6 @@ class Model: ObservableObject {
         self.timer?.invalidate()
     }
     
-    // finds index of the current song playing in the playlistSongs array
-    func getSongInd() -> Int {
-        let songInd = playlistSongs.count - audioPlayer.items().count - 1
-        if songInd < 0{
-            return 0
-        }
-        return songInd
-    }
-    
     // updates audioPlayers current song to the next queued song, or if one does not exists then the next song in the current playlist/library
     func next() {
         // adds the next song from queuedSongs (if one exists) to the front of audioPlayer's queue
@@ -265,13 +269,13 @@ class Model: ObservableObject {
             }
         }
         // sets playlistSongs equal to songs array
-        self.playlistSongs = songs
+        self.playlistSongs = songs.map { $0.title! }
         self.playerSongs = []
         let count = songInd...songs.count - 1
         
         // populates the playerSongs array with new playlist/library songs
         for s in count {
-            playerSongs.append(AVPlayerItem(url: Helper.getDocumentsDirectory().appendingPathComponent(playlistSongs[s].title!)))
+            playerSongs.append(AVPlayerItem(url: Helper.getDocumentsDirectory().appendingPathComponent(playlistSongs[s])))
         }
         
         // calls playQueue to reinitialize audioPlayer with new songs and resume playing
