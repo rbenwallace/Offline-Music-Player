@@ -41,9 +41,6 @@
 		E814C8D42804237F00B9DB4A /* Playlist+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E814C8A927F6A84800B9DB4A /* Playlist+CoreDataClass.swift */; };
 		E814C8D52804238600B9DB4A /* Song+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E814C8A827F6A84800B9DB4A /* Song+CoreDataProperties.swift */; };
 		E814C8D62804238E00B9DB4A /* Song+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E814C8A727F6A84800B9DB4A /* Song+CoreDataClass.swift */; };
-		E814C8D7280423CE00B9DB4A /* Offline-Music-Player--iOS--Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E83C660927E1ACD3004605A0 /* Offline-Music-Player--iOS--Info.plist */; };
-		E814C8D8280423CE00B9DB4A /* Offline-Music-Player--iOS--Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E83C660927E1ACD3004605A0 /* Offline-Music-Player--iOS--Info.plist */; };
-		E814C8D9280423CF00B9DB4A /* Offline-Music-Player--iOS--Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E83C660927E1ACD3004605A0 /* Offline-Music-Player--iOS--Info.plist */; };
 		E83C65FD27E1AB41004605A0 /* AddPlaylistSongsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65F027E1AB41004605A0 /* AddPlaylistSongsView.swift */; };
 		E83C65FF27E1AB41004605A0 /* PlaylistSongsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65F227E1AB41004605A0 /* PlaylistSongsView.swift */; };
 		E83C660027E1AB41004605A0 /* CustonAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65F327E1AB41004605A0 /* CustonAlert.swift */; };
@@ -426,7 +423,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E8E1122027E09FE900D96111 /* Assets.xcassets in Resources */,
-				E814C8D7280423CE00B9DB4A /* Offline-Music-Player--iOS--Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -435,7 +431,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E8E1122127E09FE900D96111 /* Assets.xcassets in Resources */,
-				E814C8D8280423CE00B9DB4A /* Offline-Music-Player--iOS--Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -444,7 +439,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E814C8D22801193500B9DB4A /* Assets.xcassets in Resources */,
-				E814C8D9280423CF00B9DB4A /* Offline-Music-Player--iOS--Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

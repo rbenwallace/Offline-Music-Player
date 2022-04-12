@@ -60,6 +60,11 @@ class Model: ObservableObject {
         return self.audioPlayer.currentItem
     }
     
+    // for testing only 
+    func getAudioPlayerSize() -> Int {
+        return self.audioPlayer.items().count
+    }
+    
     // for testing only
     func testSeek(currentTime: TimeInterval) {
         // The time slider update is complete and the audio player must now seek to the new current time

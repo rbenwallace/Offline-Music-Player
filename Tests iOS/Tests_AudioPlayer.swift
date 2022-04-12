@@ -8,6 +8,7 @@
 @testable import Offline_Music_Player
 import CoreData
 import XCTest
+import CoreMedia
 
 class Tests_AudioPlayer: XCTestCase {
     // model class which contains the audio player to be tested and the audio player's helper functions
@@ -81,28 +82,146 @@ class Tests_AudioPlayer: XCTestCase {
     
     // tests that the model's audio player's previous button functionality
     func testAudioPlayerPreviousButton() throws {
+        // tests that the audio player's current song is nil
         XCTAssertNil(self.model.getPlayerCurrentItem())
+        
+        // starts playing the audio player
         self.model.playQueue()
-        for _ in 0...7 {
+        
+        // tests that audio player's current queue size is 8
+        XCTAssertEqual(self.model.getAudioPlayerSize(), 8)
+        
+        // simulates the previous song button being pressed on the first song in the playlst
+        self.model.prev()
+        
+        // tests that audio player's current queue size is still 8 after the user presses the previous song on the first song in the playlist while the playback time is 0 seconds
+        XCTAssertEqual(self.model.getAudioPlayerSize(), 8)
+        
+        for _ in 0...6 {
             XCTAssertNotNil(self.model.getPlayerCurrentItem())
             self.model.next()
         }
-        XCTAssertNil(self.model.getPlayerCurrentItem())
+        
+        // tests that audio player's current queue size is 1 after navigating to the last song in its queue
+        XCTAssertEqual(self.model.getAudioPlayerSize(), 1)
+        
+        // tests that audio player's current queue size is 2 after the previous button is clicked while the audioPlayer has a size of 1 and has a current playback time of 0 seconds
+        self.model.prev()
+        XCTAssertEqual(self.model.getAudioPlayerSize(), 2)
+        
+        // brings the audio player's current item back to the last item in the playlist, causing the audio player;'s queue to be of size 1
+        self.model.next()
+        XCTAssertEqual(self.model.getAudioPlayerSize(), 1)
+        
+        // tests that audio player's current queue size is 1 and the playback time is 0 seconds after the previous button is clicked while the audioPlayer has a size of 1 and has a current playback time of more than 5 seconds
+        self.model.testSeek(currentTime: 30)
+        self.model.prev()
+        XCTAssertEqual(self.model.getPlayerCurrentItem()?.currentTime().seconds, 0)
+        XCTAssertEqual(self.model.getAudioPlayerSize(), 1)
+        
+        for x in (1...7).reversed() {
+            // tests that audio player's current queue size is correct after the each previous button click until the user is back to the first song in the current playlist
+            XCTAssertEqual(self.model.getAudioPlayerSize(), 8-x)
+            self.model.prev()
+        }
     }
     
     // tests that the model's audio player's play and pause button functionality
     func testAudioPlayerPlayPauseButton() throws {
+        // tests that audio player starts off in the not playing state
+        XCTAssertFalse(self.model.isPlaying)
         
+        // starts the audio player
+        self.model.playQueue()
+        
+        // tests that audio player is in the playing state
+        XCTAssertTrue(self.model.isPlaying)
+        
+        // pauses the audio player
+        self.model.pause()
+        
+        // tests that audio player is in the not playing state
+        XCTAssertFalse(self.model.isPlaying)
+        
+        // resumes the audio player
+        self.model.unPause()
+        
+        // tests that audio player is in the playing state
+        XCTAssertTrue(self.model.isPlaying)
     }
     
     // tests that the model's audio player's +/- 15 seconds button functionalies
     func testAudioPlayerPlusMinus15Buttons() throws {
+        // starts the audio player
+        self.model.playQueue()
         
+        // pauses the audio player and sets its playback time to 20 seconds
+        self.model.pause()
+        self.model.testSeek(currentTime: 20)
+        
+        // simulates a -15 seconds button press
+        self.model.goBackward()
+        
+        // asserts that the audio player's current playback time is 5 seconds
+        XCTAssertEqual(self.model.getPlayerCurrentItem()?.currentTime(), CMTime(seconds: 5, preferredTimescale: 600))
+        
+        // simulates a -15 seconds button press
+        self.model.goBackward()
+        
+        // asserts that the audio player's current playback time is 0 seconds and not -10 seconds
+        XCTAssertEqual(self.model.getPlayerCurrentItem()?.currentTime(), CMTime(seconds: 0, preferredTimescale: 600))
+        
+        // simulates a +15 seconds button press
+        self.model.goForward()
+        
+        // asserts that the audio player's current playback time is 15
+        XCTAssertEqual(self.model.getPlayerCurrentItem()?.currentTime(), CMTime(seconds: 15, preferredTimescale: 600))
     }
     
     // tests that the model's audio player's sleep timer button functionality
     func testAudioPlayerSleepTimerButton() throws {
-        sleep(10)
+        // starts the audio player
+        self.model.playQueue()
+        
+        // tests that audio player is in the playing state
+        XCTAssertTrue(self.model.isPlaying)
+        
+        // sets a sleep timer for 2 seconds
+        self.model.sleepTimer(time: 2)
+        
+        // tests that audio player's sleep timer is on
+        XCTAssertTrue(self.model.sleepTimerOn)
+        
+        // waits for 5 seconds to pass
+        do {
+            sleep(5)
+        }
+        
+        // resumes the audio player
+        self.model.unPause()
+        
+        // tests that audio player is in the playing state
+        XCTAssertTrue(self.model.isPlaying)
+        
+        // sets a sleep timer for 3 seconds
+        self.model.sleepTimer(time: 3)
+        
+        // tests that audio player's sleep timer is on
+        XCTAssertTrue(self.model.sleepTimerOn)
+        
+        // stops the audio player's sleep timer
+        self.model.stopTimer()
+        
+        // tests that audio player's sleep timer is off
+        XCTAssertFalse(self.model.sleepTimerOn)
+        
+        // waits for 5 seconds to pass
+        do {
+            sleep(5)
+        }
+        
+        // tests that audio player is in the playing state after the stopped sleep timer would have completed
+        XCTAssertTrue(self.model.isPlaying)
     }
     
 //    func testAudioPlayerIDK() throws {
