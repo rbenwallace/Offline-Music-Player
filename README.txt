@@ -109,6 +109,11 @@ This class controls the persistent data storage and management for the app.
 This stores the Playlist entity and the Song entity, and defines constraints (which entity attributes must be unique) as well as their configurations. 
 
 
+*** Tests IOS Folder ***
+- Tests_AudioPlayer.swift
+This file contains all of the unit tests for the main audio player functionalitities.
+
+
 ########
 How to run and use the app
 ########
@@ -176,3 +181,6 @@ USING THE APP:
 
 
 RUNNING APP TESTS:
+
+- To run the tests for the app, navigate into the "Tests IOS" folder, and then navigate into the Tests_AudioPlayer.swift.
+- To the left of line 12, there is an empty diamond which when clicked will run all the tests in the file (make sure a device is plugged into your computer to run the tests on).
