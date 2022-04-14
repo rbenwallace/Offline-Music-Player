@@ -65,10 +65,12 @@ struct SongCardView: View {
                             if (self.song.title != nil) && (self.song.title! == self.model.currentSong) {
                                 Text(self.song.title!)
                                     .foregroundColor(.pink)
+                                    .font(.headline)
                                     .lineLimit(2)
                             } else {
                                 Text(self.song.title ?? "Unkown Song")
                                     .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
+                                    .font(.headline)
                                     .lineLimit(2)
                             }
                             Text("Unknown")

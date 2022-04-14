@@ -37,16 +37,14 @@ struct SmartSongsView: View {
 
     // displays a list of song card views for each song in the playlist
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(songs) { song in
-                    SongCardView(song: song, fromPlaylist: true)
-                        .environmentObject(model)
-                }
+        List {
+            ForEach(songs) { song in
+                SongCardView(song: song, fromPlaylist: true)
+                    .environmentObject(model)
             }
-            .onAppear(perform: loadData)
-            .navigationTitle(playlistName)
         }
+        .onAppear(perform: loadData)
+        .navigationTitle(playlistName)
     }
     
     // updates model's songs array with current playlists songs when view appears

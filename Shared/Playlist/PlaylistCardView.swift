@@ -31,8 +31,8 @@ struct PlaylistCardView: View {
                     .padding(.trailing, 10)
                 Text(self.playlist.title!)
                     .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
+                    .font(.title3)
                     .lineLimit(1)
-                    .font(.system(size: 22))
             }
         }
     }

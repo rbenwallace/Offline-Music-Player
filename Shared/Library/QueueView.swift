@@ -18,6 +18,7 @@ struct QueueView: View {
                 ForEach(self.model.queuedSongs) { song in
                     Text(song.title!)
                         .lineLimit(2)
+                        .padding(20)
                 }
                 .onMove(perform: move)
                 .onDelete(perform: deleteItems)

@@ -32,50 +32,48 @@ struct PlaylistSongsView: View {
             AddPlaylistSongsView(isAddingSongs: $isAddingSongs, availableSongs: addableSongs(), playlist: playlist)
         } else {
             // displays a list of song card views of each song in the playlist
-            NavigationView {
-                List {
-                    ForEach(model.songs) { song in
-                        SongCardView(song: song, fromPlaylist: true)
-                            .environmentObject(model)
-                        // adds the song to the audio player's queue on swipe right
-                        .swipeActions(edge: .leading) {
-                            Button {
-                                model.queuedSongs.append(song)
-                                print("Queue Length: ", model.queuedSongs.count)
-                            } label: {
-                                Label("Add to queue", systemImage: "plus.circle")
-                            }
-                            .tint(.green)
+            List {
+                ForEach(model.songs) { song in
+                    SongCardView(song: song, fromPlaylist: true)
+                        .environmentObject(model)
+                    // adds the song to the audio player's queue on swipe right
+                    .swipeActions(edge: .leading) {
+                        Button {
+                            model.queuedSongs.append(song)
+                            print("Queue Length: ", model.queuedSongs.count)
+                        } label: {
+                            Label("Add to queue", systemImage: "plus.circle")
                         }
-                        // deletes the song from the playlist on swipe left
-                        .swipeActions(edge: .trailing) {
-                            Button {
-                                deleteSong(song: song)
-                            } label: {
-                                Label("Delete Song", systemImage: "minus.circle")
-                            }
-                            .tint(.red)
+                        .tint(.green)
+                    }
+                    // deletes the song from the playlist on swipe left
+                    .swipeActions(edge: .trailing) {
+                        Button {
+                            deleteSong(song: song)
+                        } label: {
+                            Label("Delete Song", systemImage: "minus.circle")
                         }
+                        .tint(.red)
                     }
-                    .onDelete(perform: deleteItems)
                 }
-                .onAppear(perform: loadData)
-                .navigationTitle(self.playlist.title!)
-                .toolbar {
-                    // simpler way users can delete songs
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        EditButton()
-                    }
-                    // allows users to add songs to the current playlist
-                    ToolbarItem {
-                        Button(action: {
-                            isAddingSongs.toggle()
-                            }) {
-                            Image(systemName: "plus")
-                            }
-                    }
-                    
+                .onDelete(perform: deleteItems)
+            }
+            .onAppear(perform: loadData)
+            .navigationTitle(self.playlist.title!)
+            .toolbar {
+                // simpler way users can delete songs
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    EditButton()
                 }
+                // allows users to add songs to the current playlist
+                ToolbarItem {
+                    Button(action: {
+                        isAddingSongs.toggle()
+                        }) {
+                        Image(systemName: "plus")
+                        }
+                }
+                
             }
         }
     }
