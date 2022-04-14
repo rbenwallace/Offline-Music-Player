@@ -40,7 +40,6 @@ struct PlaylistSongsView: View {
                     .swipeActions(edge: .leading) {
                         Button {
                             model.queuedSongs.append(song)
-                            print("Queue Length: ", model.queuedSongs.count)
                         } label: {
                             Label("Add to queue", systemImage: "plus.circle")
                         }
@@ -74,6 +73,10 @@ struct PlaylistSongsView: View {
                         }
                 }
                 
+            }
+            // adjusts view to include the bar player view when a song is playing
+            if !self.model.isPlayerViewPresented && self.model.currentSong != nil {
+                Spacer(minLength: 62)
             }
         }
     }

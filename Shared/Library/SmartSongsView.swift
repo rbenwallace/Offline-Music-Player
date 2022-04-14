@@ -41,10 +41,25 @@ struct SmartSongsView: View {
             ForEach(songs) { song in
                 SongCardView(song: song, fromPlaylist: true)
                     .environmentObject(model)
+                
+                // adds the song to the audio player's queue on swipe right
+                .swipeActions(edge: .leading) {
+                    Button {
+                        model.queuedSongs.append(song)
+                    } label: {
+                        Label("Add to queue", systemImage: "plus.circle")
+                    }
+                    .tint(.green)
+                }
             }
         }
         .onAppear(perform: loadData)
         .navigationTitle(playlistName)
+        
+        // adjusts view to include the bar player view when a song is playing
+        if !self.model.isPlayerViewPresented && self.model.currentSong != nil {
+            Spacer(minLength: 62)
+        }
     }
     
     // updates model's songs array with current playlists songs when view appears

@@ -84,6 +84,8 @@ struct LibraryView: View {
                     
                 }
             }
+            // adjusts view to include the bar player view when a song is playing
+            .padding(.bottom, (!self.model.isPlayerViewPresented && self.model.currentSong != nil) ? 60: 0)
             .onAppear(perform: loadData)
             // file importer for importing files
             .fileImporter(

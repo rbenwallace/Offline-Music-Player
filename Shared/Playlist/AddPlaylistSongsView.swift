@@ -57,6 +57,11 @@ struct AddPlaylistSongsView: View {
                     .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
                 }
             }
+            
+            // adjusts view to include the bar player view when a song is playing
+            if !Model.shared.isPlayerViewPresented && Model.shared.currentSong != nil {
+                Spacer(minLength: 62)
+            }
         }
         .toolbar {
             // brings user back to PlaylistSongsView without adding songs to playlist

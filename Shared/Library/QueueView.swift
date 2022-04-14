@@ -28,6 +28,8 @@ struct QueueView: View {
                 EditButton()
             }
         }
+        // adjusts view to include the bar player view when a song is playing
+        .padding(.bottom, (!self.model.isPlayerViewPresented && self.model.currentSong != nil) ? 60: 0)
     }
     
     // allows user to move a song in the queue to a new queue destination
