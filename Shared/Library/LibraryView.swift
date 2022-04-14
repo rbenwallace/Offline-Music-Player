@@ -122,7 +122,6 @@ struct LibraryView: View {
     
     // update model's songs array when view appears
     private func loadData() {
-        print("we here 2")
         self.model.songs = Array(songs)
     }
 
