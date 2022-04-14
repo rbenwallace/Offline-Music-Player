@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct BarPlayerView: View {
+    // used to determine systems background color
+    @Environment(\.colorScheme) var colorScheme
+    
     // environment object which contains published variables used in this view, and allows for audio player manipulation
     @EnvironmentObject var model: Model
     
@@ -29,6 +32,7 @@ struct BarPlayerView: View {
                     VStack(alignment: .leading) {
                         Text(self.model.currentSong ?? "")
                             .font(.headline)
+                            .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
                             .lineLimit(1)
                         Text("Unknown")
                             .font(.caption)
@@ -40,6 +44,7 @@ struct BarPlayerView: View {
                     // handles play/pause button for the current playing song and is displayed on the far right of the view
                     HStack {
                         Image(systemName: self.model.isPlaying ? "pause.fill" : "play.fill")
+                            .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
                             .font(.system(size: 30))
                             .padding()
                             .onTapGesture {

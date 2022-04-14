@@ -6,8 +6,18 @@
 //
 
 import Foundation
+import SwiftUI
 
 class Helper {
+    //
+    static let primaryBackground = Color(UIColor.systemBackground)
+    static let secondaryBackground = Color(UIColor.secondarySystemBackground)
+    static let tertiaryBackground = Color(UIColor.tertiarySystemBackground)
+    
+    static func getFontColour(colorScheme: ColorScheme) -> Color {
+        return colorScheme == .dark ? .white : .black
+    }
+    
     // returns the URL to the app's documents directory
     static func getDocumentsDirectory() -> URL {
         // retrieves all document directories for the app

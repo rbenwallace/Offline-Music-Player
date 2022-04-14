@@ -2,14 +2,19 @@
 //  PlaylistCardView.swift
 //  Offline Music Player (iOS)
 //
-//  Created by Ben Wallace on 2022-03-17.
+//  This view class represents the card view for each playlist inside PlaylistView.swift
 //
 
 import SwiftUI
 
 struct PlaylistCardView: View {
+    // used to determine systems background color
+    @Environment(\.colorScheme) var colorScheme
+    
+    // playlist entity which this card view represents
     private var playlist: Playlist
     
+    // constructor to initialize playlist which this card view represents
     init(playlist: Playlist) {
         self.playlist = playlist
     }
@@ -25,6 +30,7 @@ struct PlaylistCardView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     .padding(.trailing, 10)
                 Text(self.playlist.title!)
+                    .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
                     .lineLimit(1)
                     .font(.system(size: 22))
             }

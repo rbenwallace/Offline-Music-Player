@@ -1,8 +1,8 @@
 //
 //  PlaylistView.swift
-//  Offline Cloud Music Player
+//  Offline Music Player (iOS)
 //
-//  Created by Ben Wallace on 2022-02-21.
+//  Tjos view class displays all the user's playlists, and allows them to add more playlists or enter a playlist
 //
 
 import SwiftUI

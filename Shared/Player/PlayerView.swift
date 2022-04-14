@@ -9,6 +9,9 @@ import SwiftUI
 import AVKit
 
 struct PlayerView: View {
+    // used to determine systems background color
+    @Environment(\.colorScheme) var colorScheme
+    
     // environment object which contains published variables used in this view, and allows for audio player manipulation
     @EnvironmentObject var model: Model
     
@@ -39,11 +42,11 @@ struct PlayerView: View {
                     // represents the song title and song artist of the current song playing
                     VStack {
                         Text(self.model.currentSong!)
-                            .foregroundColor(.white)
+                            .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
                             .font(Font.system(.title2).bold())
                             .lineLimit(1)
                         Text("Unknown Artist")
-                            .foregroundColor(.gray)
+                            .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
                             .font(Font.system(.title3).bold())
                     }
                     .padding(.bottom, 20)
@@ -59,6 +62,7 @@ struct PlayerView: View {
                            minimumValueLabel: Text("\(Helper.formattedTime(self.currentTime))"),
                            maximumValueLabel: Text("\(Helper.formattedTime(self.currentDuration))")) {
                     }
+                    .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
                     .padding(.horizontal, 20)
                     .padding(.bottom, 20)
                     
@@ -100,7 +104,7 @@ struct PlayerView: View {
                             }
                     }
                     .padding(.bottom, 20)
-                    .foregroundColor(.white)
+                    .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
                     
                     Spacer(minLength: 0)
                     
@@ -162,7 +166,7 @@ struct PlayerView: View {
                         }
                     }
                     .padding(.bottom, 20)
-                    .foregroundColor(.white)
+                    .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
                     
                     Spacer(minLength: 0)
                 }
@@ -186,7 +190,7 @@ struct PlayerView: View {
             }
             .onAppear(perform: loadData)
             .background(
-                LinearGradient(gradient: Gradient(colors: [Color(.systemPink), .black]), startPoint: .top, endPoint: .bottom)
+                LinearGradient(gradient: Gradient(colors: [Color(.systemPink), Helper.primaryBackground]), startPoint: .top, endPoint: .bottom)
             )
             .edgesIgnoringSafeArea(.all)
             // moves the view down as it is dragged down by the user

@@ -9,6 +9,10 @@ import SwiftUI
 import CoreData
 
 struct CustomAlert: View {
+    // used to determine systems background color
+    @Environment(\.colorScheme) var colorScheme
+    
+    // environment object which contains published variables used in this view, and allows for audio player manipulation
     @EnvironmentObject var model: Model
     
     // persistent storage context
@@ -45,27 +49,27 @@ struct CustomAlert: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
-                .fill(Color(.systemBackground))
+                .fill(Helper.primaryBackground)
             ZStack {
                 // area that allows user to input text to fulfill alert
                 RoundedRectangle(cornerRadius: 20)
-                    .fill(Color.white)
+                    .fill(Helper.secondaryBackground)
                 VStack {
-                    Divider()
+                    Spacer(minLength: 10)
                     
                     Text(isPlaylist ? "Playlist Name" : "Rename File")
                         .font(.title)
-                        .foregroundColor(.black)
+                        .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
                     
-                    Divider()
+                    Spacer(minLength: 0)
                     
                     TextField("Enter text", text: $textEntered)
                         .padding(5)
-                        .background(Color.gray.opacity(0.2))
-                        .foregroundColor(.black)
+                        .background(Helper.tertiaryBackground)
+                        .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
                         .padding(.horizontal, 20)
                         
-                    Divider()
+                    Spacer(minLength: 0)
                     
                     // options which let user either cancel the alert, or complet it with the text they entered
                     HStack(spacing: 80) {
@@ -79,14 +83,16 @@ struct CustomAlert: View {
                                     addPlaylist(playlistName: textEntered)
                                 } else {
                                     renameSong(newTitle: textEntered)
-                                    //self.updateSong = Song()
                                 }
                             }
                             self.textEntered = ""
                             self.showingAlert.toggle()
                         }
                     }
-                    .padding(30)
+                    .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
+                    .padding(10)
+                    
+                    Spacer(minLength: 0)
                 }
             }
             .frame(width: 300, height: 200)

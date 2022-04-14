@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct SongCardView: View {
+    // used to determine systems background color
+    @Environment(\.colorScheme) var colorScheme
+    
     // environment object which contains published variables used in this view, and allows for audio player manipulation
     @EnvironmentObject var model: Model
     
@@ -65,11 +68,11 @@ struct SongCardView: View {
                                     .lineLimit(2)
                             } else {
                                 Text(self.song.title ?? "Unkown Song")
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
                                     .lineLimit(2)
                             }
                             Text("Unknown")
-                                .foregroundColor(.white)
+                                .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
                                 .font(.caption)
                         }
                     }

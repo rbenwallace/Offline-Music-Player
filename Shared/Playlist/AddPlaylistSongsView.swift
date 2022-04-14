@@ -1,14 +1,17 @@
 //
 //  AddPlaylistSongsView.swift
-//  Offline Cloud Music Player
+//  Offline Music Player (iOS)
 //
-//  Created by Ben Wallace on 2022-02-26.
+//  This view class represents the view that allows users to select and add songs to one of their playlists
 //
 
 import SwiftUI
 import CoreData
 
 struct AddPlaylistSongsView: View {
+    // used to determine systems background color
+    @Environment(\.colorScheme) var colorScheme
+    
     // persistent storage context
     @Environment(\.managedObjectContext) private var viewContext
     
@@ -22,13 +25,12 @@ struct AddPlaylistSongsView: View {
     private var availableSongs: [Song]
     
     // chosen songs to add to playlist
-    @State private var selections: [Song]
+    @State private var selections: [Song] = [Song]()
     
     // constructor to initialize local variables
     init(isAddingSongs: Binding<Bool>, availableSongs: [Song], playlist: Playlist) {
         self._isAddingSongs = isAddingSongs
         self.availableSongs = availableSongs
-        self.selections = []
         self.playlist = playlist
     }
 
@@ -36,7 +38,16 @@ struct AddPlaylistSongsView: View {
     var body: some View {
         List {
             ForEach(self.availableSongs, id: \.self) { item in
-                MultipleSelectionRow(title: item.title!, isSelected: self.selections.contains(where: { $0.id == item.id })) {
+                HStack {
+                    Text(item.title!)
+                    // adds checkmark when song is selected
+                    if selections.contains(item) {
+                        Spacer()
+                        Image(systemName: "checkmark")
+                    }
+                }
+                .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
+                .onTapGesture {
                     if self.selections.contains(item) {
                         self.selections.removeAll(where: { $0 == item })
                     }
@@ -75,26 +86,6 @@ struct AddPlaylistSongsView: View {
                 }
             }
             
-        }
-    }
-}
-
-// represents each row in the list of songs, allowing users to select and deselect the row
-struct MultipleSelectionRow: View {
-    var title: String
-    var isSelected: Bool
-    var action: () -> Void
-
-    var body: some View {
-        Button(action: self.action) {
-            HStack {
-                Text(self.title)
-                if self.isSelected {
-                    Spacer()
-                    Image(systemName: "checkmark")
-                }
-            }
-            .foregroundColor(.white)
         }
     }
 }
