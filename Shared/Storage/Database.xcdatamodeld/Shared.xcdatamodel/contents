@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21D62" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21D62" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Playlist" representedClassName="Playlist" syncable="YES">
         <attribute name="timestamp" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" attributeType="String"/>
@@ -18,7 +18,7 @@
         <relationship name="playlists" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Playlist" inverseName="songs" inverseEntity="Playlist"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
-                <constraint value="id"/>
+                <constraint value="title"/>
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>

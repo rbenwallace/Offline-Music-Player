@@ -67,7 +67,6 @@ struct LibraryView: View {
                     }
                     .onDelete(perform: deleteItems)
                 }
-                .onAppear(perform: loadData)
                 .navigationTitle("Library")
                 .toolbar {
                     // allows user to delete multiple songs at once
@@ -84,8 +83,8 @@ struct LibraryView: View {
                     }
                     
                 }
-                Text("Select an item")
             }
+            .onAppear(perform: loadData)
             // file importer for importing files
             .fileImporter(
                 isPresented: $isImporting,
@@ -123,6 +122,7 @@ struct LibraryView: View {
     
     // update model's songs array when view appears
     private func loadData() {
+        print("we here 2")
         self.model.songs = Array(songs)
     }
 

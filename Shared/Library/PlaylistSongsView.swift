@@ -80,6 +80,7 @@ struct PlaylistSongsView: View {
     
     // updates the model's songs array with current playlist's songs when the view appear
     private func loadData() {
+        print("we here 1")
         self.model.songs = self.playlist.songArray
     }
     

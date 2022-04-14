@@ -38,22 +38,23 @@ struct AddPlaylistSongsView: View {
     var body: some View {
         List {
             ForEach(self.availableSongs, id: \.self) { item in
-                HStack {
-                    Text(item.title!)
-                    // adds checkmark when song is selected
-                    if selections.contains(item) {
-                        Spacer()
-                        Image(systemName: "checkmark")
-                    }
-                }
-                .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
-                .onTapGesture {
+                Button(action: {
                     if self.selections.contains(item) {
                         self.selections.removeAll(where: { $0 == item })
                     }
                     else {
                         self.selections.append(item)
                     }
+                }) {
+                    HStack {
+                        Text(item.title!)
+                        // adds checkmark when song is selected
+                        if selections.contains(item) {
+                            Spacer()
+                            Image(systemName: "checkmark")
+                        }
+                    }
+                    .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
                 }
             }
         }
