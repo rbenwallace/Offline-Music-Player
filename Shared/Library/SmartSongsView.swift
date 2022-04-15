@@ -53,13 +53,10 @@ struct SmartSongsView: View {
                 }
             }
         }
+        // adjusts view to include the bar player view when a song is playing
+        .padding(.bottom, (!self.model.isPlayerViewPresented && self.model.currentSong != nil) ? 36: 0)
         .onAppear(perform: loadData)
         .navigationTitle(playlistName)
-        
-        // adjusts view to include the bar player view when a song is playing
-        if !self.model.isPlayerViewPresented && self.model.currentSong != nil {
-            Spacer(minLength: 62)
-        }
     }
     
     // updates model's songs array with current playlists songs when view appears

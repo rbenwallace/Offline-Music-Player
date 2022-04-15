@@ -49,7 +49,6 @@ struct LibraryView: View {
                             .swipeActions(edge: .leading) {
                                 Button {
                                     model.queuedSongs.append(song)
-                                    print("Queue Length: ", model.queuedSongs.count)
                                 } label: {
                                     Label("Add to queue", systemImage: "plus.circle")
                                 }

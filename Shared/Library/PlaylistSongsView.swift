@@ -57,8 +57,10 @@ struct PlaylistSongsView: View {
                 }
                 .onDelete(perform: deleteItems)
             }
+            // adjusts view to include the bar player view when a song is playing
+            .padding(.bottom, (!self.model.isPlayerViewPresented && self.model.currentSong != nil) ? 36: 0)
             .onAppear(perform: loadData)
-            .navigationTitle(self.playlist.title!)
+            .navigationTitle(self.playlist.title ?? "Unkown Playlist")
             .toolbar {
                 // simpler way users can delete songs
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -73,10 +75,6 @@ struct PlaylistSongsView: View {
                         }
                 }
                 
-            }
-            // adjusts view to include the bar player view when a song is playing
-            if !self.model.isPlayerViewPresented && self.model.currentSong != nil {
-                Spacer(minLength: 62)
             }
         }
     }
