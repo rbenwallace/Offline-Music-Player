@@ -45,7 +45,7 @@ struct SmartSongsView: View {
                 // adds the song to the audio player's queue on swipe right
                 .swipeActions(edge: .leading) {
                     Button {
-                        model.queuedSongs.append(song)
+                        model.addToQueue(song: song)
                     } label: {
                         Label("Add to queue", systemImage: "plus.circle")
                     }

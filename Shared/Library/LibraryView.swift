@@ -48,7 +48,7 @@ struct LibraryView: View {
                             // lets user add a song to the audio player's queue by swiping right
                             .swipeActions(edge: .leading) {
                                 Button {
-                                    model.queuedSongs.append(song)
+                                    self.model.addToQueue(song: song)
                                 } label: {
                                     Label("Add to queue", systemImage: "plus.circle")
                                 }

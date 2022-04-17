@@ -16,7 +16,7 @@ struct QueueView: View {
         NavigationView {
             List {
                 ForEach(self.model.queuedSongs) { song in
-                    Text(song.title!)
+                    Text(song.title ?? "Unknown Song")
                         .lineLimit(2)
                         .padding(20)
                 }

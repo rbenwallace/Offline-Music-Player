@@ -48,6 +48,7 @@ struct AddPlaylistSongsView: View {
                 }) {
                     HStack {
                         Text(item.title!)
+                            .padding(20)
                         // adds checkmark when song is selected
                         if selections.contains(item) {
                             Spacer()

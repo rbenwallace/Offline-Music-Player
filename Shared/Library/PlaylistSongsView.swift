@@ -33,13 +33,13 @@ struct PlaylistSongsView: View {
         } else {
             // displays a list of song card views of each song in the playlist
             List {
-                ForEach(model.songs) { song in
+                ForEach(self.model.songs) { song in
                     SongCardView(song: song, fromPlaylist: true)
                         .environmentObject(model)
                     // adds the song to the audio player's queue on swipe right
                     .swipeActions(edge: .leading) {
                         Button {
-                            model.queuedSongs.append(song)
+                            self.model.addToQueue(song: song)
                         } label: {
                             Label("Add to queue", systemImage: "plus.circle")
                         }

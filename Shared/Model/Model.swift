@@ -87,6 +87,12 @@ class Model: ObservableObject {
     
     // Updates audioPlayer's queue to remove songs that have been deleted from the database
     func deleteSong(deleteSong: String)  {
+        // updates currentSong index depending on where in the queue the song was deleted
+        if let idx = self.queuedSongs.firstIndex(where: { $0.title! == deleteSong }) {
+            // removes the song from queuedSongs array
+            self.queuedSongs.remove(at: idx)
+        }
+        
         if self.currentSong != nil {
             // updates currentSong index depending on where in the queue the song was deleted
             if let idx = self.playlistSongs.firstIndex(where: { $0 == deleteSong }) {
@@ -100,12 +106,6 @@ class Model: ObservableObject {
                 
                 // removes the song from playlistSongs array
                 self.playlistSongs.remove(at: idx)
-            }
-            
-            // updates currentSong index depending on where in the queue the song was deleted
-            if let idx = self.queuedSongs.firstIndex(where: { $0.title! == deleteSong }) {
-                // removes the song from queuedSongs array
-                self.queuedSongs.remove(at: idx)
             }
             
             let deleted: [String] = [deleteSong]
@@ -256,6 +256,13 @@ class Model: ObservableObject {
         if audioPlayer.currentItem != nil{
             audioPlayer.play()
             isPlaying = true;
+        }
+    }
+    
+    // handles a song being added to the queue
+    func addToQueue(song: Song) {
+        if !self.queuedSongs.contains(song) {
+            self.queuedSongs.append(song)
         }
     }
     
