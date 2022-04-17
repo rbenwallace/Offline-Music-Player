@@ -9,11 +9,12 @@ import Foundation
 import SwiftUI
 
 class Helper {
-    //
+    // Defines the main three system colours used in the app's views based on the user's system background colour settings
     static let primaryBackground = Color(UIColor.systemBackground)
     static let secondaryBackground = Color(UIColor.secondarySystemBackground)
     static let tertiaryBackground = Color(UIColor.tertiarySystemBackground)
     
+    // returns the opposite colour of the systems background colour to use for a view's font colour
     static func getFontColour(colorScheme: ColorScheme) -> Color {
         return colorScheme == .dark ? .white : .black
     }
