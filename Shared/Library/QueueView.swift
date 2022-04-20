@@ -2,7 +2,7 @@
 //  QueueView.swift
 //  Offline Music Player (iOS)
 //
-//  Created by Ben Wallace on 2022-03-02.
+//  Represents the view which displays all Song entities that have been added to the queue, and allows for the user to manipulate the queue by deleting and rearranging Song entities 
 //
 
 import SwiftUI
@@ -15,7 +15,7 @@ struct QueueView: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach(self.model.queuedSongs) { song in
+                ForEach(model.queuedSongs) { song in
                     Text(song.title ?? "Unknown Song")
                         .lineLimit(2)
                         .padding(20)
@@ -29,19 +29,19 @@ struct QueueView: View {
             }
         }
         // adjusts view to include the bar player view when a song is playing
-        .padding(.bottom, (!self.model.isPlayerViewPresented && self.model.currentSong != nil) ? 60: 0)
+        .padding(.bottom, (!model.isPlayerViewPresented && model.currentSong != nil) ? 60: 0)
     }
     
     // allows user to move a song in the queue to a new queue destination
     func move(from source: IndexSet, to destination: Int) {
-        self.model.queuedSongs.move(fromOffsets: source, toOffset: destination)
+        model.queuedSongs.move(fromOffsets: source, toOffset: destination)
     }
 
     // deletes songs from the model's queue array
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                self.model.queuedSongs.remove(at: index)
+                model.queuedSongs.remove(at: index)
             }
         }
     }

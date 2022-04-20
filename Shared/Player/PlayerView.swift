@@ -18,15 +18,12 @@ struct PlayerView: View {
     // State TimeInterval variable which is updated by the view's receiver and populates the time slider's current time for the current playing song
     @State private var currentTime: TimeInterval = 0
     
-    // State TimeInterval variable which is updated by the view's receiver and populates the time slider's duration time for the current playing song
-    @State private var currentDuration: TimeInterval = 0
-    
     // keeps track of the amount the view has been dragged
     @State private var offset = CGSize.zero
     
     var body: some View {
         // only displays the view if there is a song currently playing
-        if self.model.currentSong != nil{
+        if model.currentSong != nil{
             HStack {
                 Spacer(minLength: 0)
                 
@@ -41,7 +38,7 @@ struct PlayerView: View {
                     
                     // represents the song title and song artist of the current song playing
                     VStack {
-                        Text(self.model.currentSong!)
+                        Text(model.currentSong!)
                             .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
                             .font(Font.system(.title2).bold())
                             .lineLimit(1)
@@ -56,11 +53,11 @@ struct PlayerView: View {
                     Spacer(minLength: 0)
                     
                     // represents the time bar slider for users to manipulate the current time of the current song playing
-                    Slider(value: self.$currentTime,
-                           in: 0...self.currentDuration,
+                    Slider(value: $currentTime,
+                           in: 0...model.currentDuration,
                            onEditingChanged: timeSliderUpdated,
-                           minimumValueLabel: Text("\(Helper.formattedTime(self.currentTime))"),
-                           maximumValueLabel: Text("\(Helper.formattedTime(self.currentDuration))")) {
+                           minimumValueLabel: Text("\(Helper.formattedTime(currentTime))"),
+                           maximumValueLabel: Text("\(Helper.formattedTime(model.currentDuration))")) {
                     }
                     .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
                     .padding(.horizontal, 20)
@@ -75,8 +72,8 @@ struct PlayerView: View {
                             .padding(.horizontal, 20)
                             .multilineTextAlignment(.center)
                             .onTapGesture {
-                                self.model.prev()
-                                self.model.isPlaying = true
+                                model.prev()
+                                model.isPlaying = true
                             }
                         
                         // represents the play/pause buttton
@@ -86,10 +83,10 @@ struct PlayerView: View {
                             .padding(.horizontal, 20)
                             .multilineTextAlignment(.center)
                             .onTapGesture {
-                                if self.model.isPlaying{
-                                    self.model.pause()
+                                if model.isPlaying{
+                                    model.pause()
                                 } else {
-                                    self.model.unPause()
+                                    model.unPause()
                                 }
                          }
                         
@@ -99,8 +96,8 @@ struct PlayerView: View {
                             .padding(.horizontal, 20)
                             .multilineTextAlignment(.center)
                             .onTapGesture {
-                                self.model.next()
-                                self.model.isPlaying = true
+                                model.next()
+                                model.isPlaying = true
                             }
                     }
                     .padding(.bottom, 20)
@@ -128,7 +125,7 @@ struct PlayerView: View {
                             .padding(.horizontal, 15)
                             .multilineTextAlignment(.center)
                             .onTapGesture {
-                                self.model.goBackward()
+                                model.goBackward()
                             }
                         
                         Spacer(minLength: 0)
@@ -139,7 +136,7 @@ struct PlayerView: View {
                             .padding(.horizontal, 15)
                             .multilineTextAlignment(.center)
                             .onTapGesture {
-                                self.model.goForward()
+                                model.goForward()
                             }
                         
                         Spacer(minLength: 0)
@@ -153,6 +150,7 @@ struct PlayerView: View {
                             Button(action: { model.sleepTimer(time: 600) }, label: { Text("10 Minutes") })
                             Button(action: { model.sleepTimer(time: 60) }, label: { Text("1 Minute") })
                         } label: {
+                            // displays the sleep timer as a filled or non filled moon depending whether a sleep timer has been set
                             model.sleepTimerOn ? Label("", systemImage: "moon.fill")
                                 .tint(.white)
                                 .font(.system(size: 25))
@@ -173,28 +171,29 @@ struct PlayerView: View {
                 // Listen out for the time observer publishing changes to the player's time
                 .onReceive(model.timeObserver.publisher) { time in
                     // Update the local var
-                    self.currentTime = time
+                    currentTime = time
                 }
                 // Listen out for the item observer publishing a change to whether the player has an item
                 .onReceive(model.currentSongObserver.publisher) { hasItem in
-                    self.currentTime = 0
-                    if hasItem && self.model.getPlayerCurrentItem() != nil {
-                        if self.model.getPlayerCurrentItem()!.duration.isNumeric {
-                            self.currentDuration =  TimeInterval(self.model.getPlayerCurrentItem()!.duration.seconds)
+                    currentTime = 0
+                    if hasItem {
+                        if model.getPlayerCurrentItem()!.duration.isNumeric {
+                            model.currentDuration =  TimeInterval(model.getPlayerCurrentItem()!.duration.seconds)
                         }
                     } else {
-                        self.currentDuration =  0
+                        model.currentDuration =  0
                     }
                 }
                 Spacer(minLength: 0)
             }
             .onAppear(perform: loadData)
             .background(
+                // gradient background of the view
                 LinearGradient(gradient: Gradient(colors: [Color(.systemPink), Helper.primaryBackground]), startPoint: .top, endPoint: .bottom)
             )
             .edgesIgnoringSafeArea(.all)
             // moves the view down as it is dragged down by the user
-            .offset(x: 0, y: self.offset.height)
+            .offset(x: 0, y: offset.height)
             // makes the view fade as it gets dragged closer to the bottom
             .opacity(4 - Double(offset.height/100))
             // handles downward drag gesture to exit the view
@@ -203,17 +202,17 @@ struct PlayerView: View {
                     // If the view is being dragged down, update the offset value
                     .onChanged { gesture in
                         if gesture.translation.height > CGSize(width: 0, height: 20).height {
-                            self.offset = gesture.translation
+                            offset = gesture.translation
                         }
                     }
                     // When the drag gesture has been completed, update the isPlayerViewPresented variable if the view was dragged down far enough or otherwise reset the offset to 0
                     .onEnded { _ in
                         if offset.height > 200 {
-                            self.model.isPlayerViewPresented = false
+                            model.isPlayerViewPresented = false
                         }
                         else {
                             withAnimation {
-                                self.offset = .zero
+                                offset = .zero
                             }
                         }
                     }
@@ -223,15 +222,15 @@ struct PlayerView: View {
     
     // actions that occur when the view is presented to the user
     private func loadData(){
-        if self.model.getPlayerCurrentItem() != nil {
+        if model.getPlayerCurrentItem() != nil {
             // populates the time bar slider's duration with the duration of the current playing song
-            if self.model.getPlayerCurrentItem()!.duration.isNumeric {
-                self.currentDuration =  TimeInterval(self.model.getPlayerCurrentItem()!.duration.seconds)
+            if model.getPlayerCurrentItem()!.duration.isNumeric {
+                model.currentDuration =  TimeInterval(model.getPlayerCurrentItem()!.duration.seconds)
             }
             
             // populates the time bar slider's current time with the current playback time of the current playing song
-            if self.model.getPlayerCurrentItem()!.currentTime().isNumeric {
-                self.currentTime =  TimeInterval(self.model.getPlayerCurrentItem()!.currentTime().seconds)
+            if model.getPlayerCurrentItem()!.currentTime().isNumeric {
+                currentTime =  TimeInterval(model.getPlayerCurrentItem()!.currentTime().seconds)
             }
         }
     }
@@ -239,19 +238,19 @@ struct PlayerView: View {
     // Handles the time bar slider being manipulated 
     private func timeSliderUpdated(updateStarted: Bool) {
         // makes sure the time bar slider manipulation does not offset the view
-        if self.offset.height != .zero {
+        if offset.height != .zero {
             withAnimation {
-                self.offset = .zero
+                offset = .zero
             }
         }
         
         if updateStarted {
             // Informs the timeObserver that the time slider is being updated and to temporarily stop sending time updates
-            self.model.timeObserver.setTimeUpdating(timeUpdating: true)
+            model.timeObserver.setTimeUpdating(timeUpdating: true)
         }
         else {
             // time bar slider update has been completed so audio player seeks to new current time and timeObserver returns to publishing time updates
-            self.model.playerSeek(currentTime: currentTime)
+            model.playerSeek(currentTime: currentTime)
         }
     }
 }

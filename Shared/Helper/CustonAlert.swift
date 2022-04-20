@@ -74,19 +74,19 @@ struct CustomAlert: View {
                     // options which let user either cancel the alert, or complet it with the text they entered
                     HStack(spacing: 80) {
                         Button("Cancel") {
-                            self.showingAlert.toggle()
+                            showingAlert.toggle()
                         }
                         
                         Button("Ok") {
-                            if self.textEntered != ""{
+                            if textEntered != ""{
                                 if isPlaylist {
                                     addPlaylist(playlistName: textEntered)
                                 } else {
                                     renameSong(newTitle: textEntered)
                                 }
                             }
-                            self.textEntered = ""
-                            self.showingAlert.toggle()
+                            textEntered = ""
+                            showingAlert.toggle()
                         }
                     }
                     .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
@@ -103,10 +103,10 @@ struct CustomAlert: View {
     private func renameSong(newTitle: String) {
         do {
             // renames song in app's document directory
-            try FileManager.default.moveItem(at: Helper.getDocumentsDirectory().appendingPathComponent(self.updateSong.title!), to: Helper.getDocumentsDirectory().appendingPathComponent(textEntered + self.updateSong.title![self.updateSong.title!.lastIndex(of: ".")!...]))
+            try FileManager.default.moveItem(at: Helper.getDocumentsDirectory().appendingPathComponent(updateSong.title!), to: Helper.getDocumentsDirectory().appendingPathComponent(textEntered + updateSong.title![updateSong.title!.lastIndex(of: ".")!...]))
             
             // renames song in database
-            self.updateSong.title = textEntered + self.updateSong.title![self.updateSong.title!.lastIndex(of: ".")!...]
+            updateSong.title = textEntered + updateSong.title![updateSong.title!.lastIndex(of: ".")!...]
             try viewContext.save()
         } catch {
             print("Could not remame song: \(error.localizedDescription)")

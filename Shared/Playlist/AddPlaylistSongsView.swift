@@ -37,13 +37,13 @@ struct AddPlaylistSongsView: View {
     // displays list of songs that can be added to the passed playlist, allows users to click the songs they want to add
     var body: some View {
         List {
-            ForEach(self.availableSongs, id: \.self) { item in
+            ForEach(availableSongs) { item in
                 Button(action: {
-                    if self.selections.contains(item) {
-                        self.selections.removeAll(where: { $0 == item })
+                    if selections.contains(item) {
+                        selections.removeAll(where: { $0 == item })
                     }
                     else {
-                        self.selections.append(item)
+                        selections.append(item)
                     }
                 }) {
                     HStack {
@@ -58,17 +58,12 @@ struct AddPlaylistSongsView: View {
                     .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
                 }
             }
-            
-            // adjusts view to include the bar player view when a song is playing
-            if !Model.shared.isPlayerViewPresented && Model.shared.currentSong != nil {
-                Spacer(minLength: 62)
-            }
         }
         .toolbar {
             // brings user back to PlaylistSongsView without adding songs to playlist
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
-                    self.isAddingSongs.toggle()
+                    isAddingSongs.toggle()
                 }) {
                     Text("Cancel")
                 }
@@ -77,8 +72,8 @@ struct AddPlaylistSongsView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
                     // adds songs to playlist
-                    for s in self.selections {
-                        self.playlist.addToSongs(s)
+                    for s in selections {
+                        playlist.addToSongs(s)
                     }
                     // saves changes to viewContext
                     do {
@@ -87,7 +82,7 @@ struct AddPlaylistSongsView: View {
                         print("Failed to add songs to playlist: \(error.localizedDescription)")
                     }
                     // updates isAddingSongs to false
-                    self.isAddingSongs.toggle()
+                    isAddingSongs.toggle()
                 }) {
                     Text("Add")
                 }

@@ -48,7 +48,7 @@ struct SongCardView: View {
     }
     
     var body: some View {
-        Button(action: { self.model.playSong(id: self.song.id!, fromPlaylist: self.fromPlaylist, songTitle: self.song.title!) }) {
+        Button(action: { model.playSong(id: song.id!, fromPlaylist: fromPlaylist, songTitle: song.title!) }) {
             VStack {
                 Spacer(minLength: 0)
                 
@@ -62,13 +62,13 @@ struct SongCardView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 10))
                             .padding(.trailing, 5)
                         VStack(alignment: .leading) {
-                            if (self.song.title != nil) && (self.song.title! == self.model.currentSong) {
-                                Text(self.song.title!)
+                            if (song.title != nil) && (song.title! == model.currentSong) {
+                                Text(song.title!)
                                     .foregroundColor(.pink)
                                     .font(.headline)
                                     .lineLimit(2)
                             } else {
-                                Text(self.song.title ?? "Unkown Song")
+                                Text(song.title ?? "Unkown Song")
                                     .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
                                     .font(.headline)
                                     .lineLimit(2)
@@ -80,11 +80,11 @@ struct SongCardView: View {
                     }
                     // plays the song if this card view is pressed
                     .onTapGesture {
-                        self.model.playSong(id: self.song.id!, fromPlaylist: self.fromPlaylist, songTitle: self.song.title!)
+                        model.playSong(id: song.id!, fromPlaylist: fromPlaylist, songTitle: song.title!)
                     }
                     
                     // menu which allows song to be manipulated or shared/exported
-                    if(!self.fromPlaylist){
+                    if(!fromPlaylist){
                         Spacer()
                         
                         Menu {
@@ -102,14 +102,14 @@ struct SongCardView: View {
     
     // Sets the song to be updated and updates the text to be shown to the user, then updates the alertShowing state to display the CustomAlert view
     func editSongTitle() {
-        self.updateSong = song
-        self.alertShowing.toggle()
-        self.textEntered = String(self.song.title![..<self.song.title!.lastIndex(of: ".")!])
+        updateSong = song
+        alertShowing.toggle()
+        textEntered = String(song.title![..<song.title!.lastIndex(of: ".")!])
     }
     
     // Prompts user with the share file window, allowing them to share the song file associated with this song card view
     func shareSong() {
-        let activityVC = UIActivityViewController(activityItems: [Helper.getDocumentsDirectory().appendingPathComponent(self.song.title!)], applicationActivities: nil)
+        let activityVC = UIActivityViewController(activityItems: [Helper.getDocumentsDirectory().appendingPathComponent(song.title!)], applicationActivities: nil)
         UIApplication.shared.windows.first?.rootViewController?.present(activityVC, animated: true, completion: nil)
     }
     

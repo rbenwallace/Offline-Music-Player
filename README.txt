@@ -11,6 +11,14 @@ Description
 
 This application is an IOS music player which allows users to import their own music files from locally or from cloud storage platforms, and allows them to play their songs while online or offline. Users play their songs in a library of all their songs, they can create custom playlists and play songs from within them, they can add songs to a queue, and they are provided a music player view to manipulate the current song playing. Music playing will continue to play in the background, so users can visit other apps while listening to music from this app. There are also many more customization features that can be used in the app which are listed in detail in the "How to Use" section of this readme file. This app also supports accessibility as it is fully functional with all text sizes the user could possibly have on their iPhone. If the user has ever using Apple Music, they will see the user interface inspiration from it and the app aims to provide a similar experience to using that app.
 
+
+########
+Note to reader
+########
+
+Only files and folders relevant to IOS are important for this project. I made the app cross platform for future expansion desires but this was not part of my project submission so all MacOS files and folders should be ignored. 
+
+
 ########
 Relevant files included
 ########
@@ -110,12 +118,13 @@ This stores the Playlist entity and the Song entity, and defines constraints (wh
 
 
 *** Tests IOS Folder ***
+
 - Tests_AudioPlayer.swift
 This file contains all of the unit tests for the main audio player functionalitities.
 
 
 ########
-How to run and use the app
+How to run, use, and test the app
 ########
 
 RUNNING THE APP:

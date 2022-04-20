@@ -69,7 +69,7 @@ struct ContentView: View {
             // Displays either BarPlayerView or PlayerView when a song is being played
             Group {
                 // displays the full screen player, PlayerView
-                if self.model.isPlayerViewPresented {
+                if model.isPlayerViewPresented {
                     PlayerView()
                         .environmentObject(model)
                 }
@@ -80,7 +80,7 @@ struct ContentView: View {
                         .onTapGesture {
                             withAnimation(Animation.spring(response: 0.7, dampingFraction: 0.85)) {
                                 UIImpactFeedbackGenerator(style: .soft).impactOccurred(intensity: 0.7)
-                                self.model.isPlayerViewPresented.toggle()
+                                model.isPlayerViewPresented.toggle()
                             }
                         }
                         .padding(.bottom, 49)
@@ -90,13 +90,20 @@ struct ContentView: View {
         }
         // gives buttons and icons pink tint
         .accentColor(.pink)
-        // receives each time the timer publshes in order to update the model's currentSong property if necessary
+        // receives each time the timer publshes in order to update the model's currentSong and currentDuration property if necessary
         .onReceive(timer) { _ in
-            if self.model.getPlayerCurrentItem() != nil {
-                let asset = self.model.getPlayerCurrentItem()!.asset
+            if model.getPlayerCurrentItem() != nil {
+                // updates model's currentDuration if it is different from the current playing song's duration
+                if model.getPlayerCurrentItem()!.duration.isNumeric {
+                    if model.currentDuration != model.getPlayerCurrentItem()!.duration.seconds {
+                        model.currentDuration = TimeInterval(model.getPlayerCurrentItem()!.duration.seconds)
+                    }
+                }
+                let asset = model.getPlayerCurrentItem()!.asset
                 if let urlAsset = asset as? AVURLAsset {
-                    if self.model.currentSong != urlAsset.url.lastPathComponent {
-                        self.model.currentSong = urlAsset.url.lastPathComponent
+                    // updates model's currentSong if it is different from the current playing song
+                    if model.currentSong != urlAsset.url.lastPathComponent {
+                        model.currentSong = urlAsset.url.lastPathComponent
                     }
                 }
             }

@@ -2,7 +2,7 @@
 //  PlaylistView.swift
 //  Offline Music Player (iOS)
 //
-//  Tjos view class displays all the user's playlists, and allows them to add more playlists or enter a playlist
+//  This view class displays all the user's playlists, and allows them to add more playlists or enter a playlist
 //
 
 import SwiftUI
@@ -21,8 +21,8 @@ struct PlaylistView: View {
     @State private var textEntered = ""
     
     var body: some View {
-        if self.showingAlert == true {
-            CustomAlert(isPlaylist: true, textEntered: $textEntered, showingAlert: self.$showingAlert)
+        if showingAlert == true {
+            CustomAlert(isPlaylist: true, textEntered: $textEntered, showingAlert: $showingAlert)
         } else{
             NavigationView {
                 List {
@@ -48,7 +48,7 @@ struct PlaylistView: View {
                     }
                     ToolbarItem {
                         Button(action: {
-                            self.showingAlert.toggle()
+                            showingAlert.toggle()
                             }) {
                             Image(systemName: "plus")
                             }
@@ -57,7 +57,7 @@ struct PlaylistView: View {
                 }
             }
             // adjusts view to include the bar player view when a song is playing
-            .padding(.bottom, (!self.model.isPlayerViewPresented && self.model.currentSong != nil) ? 60: 0)
+            .padding(.bottom, (!model.isPlayerViewPresented && model.currentSong != nil) ? 60: 0)
         }
     }
 

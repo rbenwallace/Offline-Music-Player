@@ -33,13 +33,13 @@ struct PlaylistSongsView: View {
         } else {
             // displays a list of song card views of each song in the playlist
             List {
-                ForEach(self.model.songs) { song in
+                ForEach(model.songs) { song in
                     SongCardView(song: song, fromPlaylist: true)
                         .environmentObject(model)
                     // adds the song to the audio player's queue on swipe right
                     .swipeActions(edge: .leading) {
                         Button {
-                            self.model.addToQueue(song: song)
+                            model.addToQueue(song: song)
                         } label: {
                             Label("Add to queue", systemImage: "plus.circle")
                         }
@@ -57,10 +57,8 @@ struct PlaylistSongsView: View {
                 }
                 .onDelete(perform: deleteItems)
             }
-            // adjusts view to include the bar player view when a song is playing
-            .padding(.bottom, (!self.model.isPlayerViewPresented && self.model.currentSong != nil) ? 36: 0)
             .onAppear(perform: loadData)
-            .navigationTitle(self.playlist.title ?? "Unkown Playlist")
+            .navigationTitle(playlist.title ?? "Unkown Playlist")
             .toolbar {
                 // simpler way users can delete songs
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -81,13 +79,13 @@ struct PlaylistSongsView: View {
     
     // updates the model's songs array with current playlist's songs when the view appear
     private func loadData() {
-        self.model.songs = self.playlist.songArray
+        model.songs = playlist.songArray
     }
     
     // generates a list of all the songs not currently in the current playlist
     private func addableSongs() -> [Song]{
         var returnArr: [Song] = []
-        let currSongs = self.playlist.songArray
+        let currSongs = playlist.songArray
         let fetchRequest = NSFetchRequest<Song>(entityName: "Song")
         do {
             let allSongs: [Song] = try viewContext.fetch(fetchRequest)
@@ -106,7 +104,7 @@ struct PlaylistSongsView: View {
     private func addItem(songArr: [Song]) {
         withAnimation {
             for s in songArr {
-                self.playlist.addToSongs(s)
+                playlist.addToSongs(s)
             }
             do {
                 try viewContext.save()
@@ -115,14 +113,14 @@ struct PlaylistSongsView: View {
                 return 
             }
             // updates the model's songs array with the current playlist's new songs
-            self.model.songs = self.playlist.songArray
+            model.songs = playlist.songArray
         }
     }
     
     // deletes a song from the current playlist and view context saves the playlist
     private func deleteSong(song: Song) {
         withAnimation {
-            self.playlist.removeFromSongs(song)
+            playlist.removeFromSongs(song)
             do {
                 try viewContext.save()
             } catch {
@@ -130,14 +128,14 @@ struct PlaylistSongsView: View {
                 return
             }
             // updates the model's songs array with the current playlist's new songs
-            self.model.songs = self.playlist.songArray
+            model.songs = playlist.songArray
         }
     }
 
     // removes multiple songs from the playlist
     private func deleteItems(offsets: IndexSet) {
         for index in offsets {
-            deleteSong(song: self.playlist.songArray[index])
+            deleteSong(song: playlist.songArray[index])
         }
     }
 }

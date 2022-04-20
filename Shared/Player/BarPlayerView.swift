@@ -16,7 +16,7 @@ struct BarPlayerView: View {
     
     var body: some View {
         // only shows the view if a song is currently playing 
-        if self.model.currentSong != nil {
+        if model.currentSong != nil {
             VStack {
                 Spacer()
                 
@@ -30,7 +30,7 @@ struct BarPlayerView: View {
                     
                     // Displays the title of the current song along with its author
                     VStack(alignment: .leading) {
-                        Text(self.model.currentSong ?? "")
+                        Text(model.currentSong ?? "")
                             .font(.headline)
                             .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
                             .lineLimit(1)
@@ -43,15 +43,15 @@ struct BarPlayerView: View {
                     
                     // handles play/pause button for the current playing song and is displayed on the far right of the view
                     HStack {
-                        Image(systemName: self.model.isPlaying ? "pause.fill" : "play.fill")
+                        Image(systemName: model.isPlaying ? "pause.fill" : "play.fill")
                             .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
                             .font(.system(size: 30))
                             .padding()
                             .onTapGesture {
-                                if self.model.isPlaying{
-                                    self.model.pause()
+                                if model.isPlaying{
+                                    model.pause()
                                 } else {
-                                    self.model.unPause()
+                                    model.unPause()
                                 }
                             }
                     }

@@ -29,7 +29,7 @@ struct PlaylistCardView: View {
                     .frame(width: 90, height: 90)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     .padding(.trailing, 10)
-                Text(self.playlist.title!)
+                Text(playlist.title!)
                     .foregroundColor(Helper.getFontColour(colorScheme: colorScheme))
                     .font(.headline)
                     .lineLimit(1)

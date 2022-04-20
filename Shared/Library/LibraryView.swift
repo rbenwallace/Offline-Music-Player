@@ -35,20 +35,20 @@ struct LibraryView: View {
 
     var body: some View {
         // displays the Custom Alert View
-        if self.showingAlert == true {
-            CustomAlert(isPlaylist: false, textEntered: self.$textEntered, showingAlert: self.$showingAlert, updateSong: self.$updateSong)
+        if showingAlert == true {
+            CustomAlert(isPlaylist: false, textEntered: $textEntered, showingAlert: $showingAlert, updateSong: $updateSong)
                 .environment(\.managedObjectContext, viewContext)
         } else{
             // Displays a list of SongCardView views to represent every Song entity
             NavigationView {
                 List {
                     ForEach(songs) { song in
-                        SongCardView(song: song, fromPlaylist: false, alertShowing: self.$showingAlert, textEntered: self.$textEntered, updateSong: self.$updateSong)
+                        SongCardView(song: song, fromPlaylist: false, alertShowing: $showingAlert, textEntered: $textEntered, updateSong: $updateSong)
                             .environmentObject(model)
                             // lets user add a song to the audio player's queue by swiping right
                             .swipeActions(edge: .leading) {
                                 Button {
-                                    self.model.addToQueue(song: song)
+                                    model.addToQueue(song: song)
                                 } label: {
                                     Label("Add to queue", systemImage: "plus.circle")
                                 }
@@ -84,7 +84,7 @@ struct LibraryView: View {
                 }
             }
             // adjusts view to include the bar player view when a song is playing
-            .padding(.bottom, (!self.model.isPlayerViewPresented && self.model.currentSong != nil) ? 60: 0)
+            .padding(.bottom, (!model.isPlayerViewPresented && model.currentSong != nil) ? 60: 0)
             .onAppear(perform: loadData)
             // file importer for importing files
             .fileImporter(
@@ -111,11 +111,11 @@ struct LibraryView: View {
                         }
                     } catch {
                         print("File Import Error: \(error.localizedDescription)")
-                        self.isImporting = false
+                        isImporting = false
                     }
                 } else {
                     print("File Import Failed")
-                    self.isImporting = false
+                    isImporting = false
                 }
             }
         }
@@ -123,7 +123,7 @@ struct LibraryView: View {
     
     // update model's songs array when view appears
     private func loadData() {
-        self.model.songs = Array(songs)
+        model.songs = Array(songs)
     }
 
     // adds song to core data database
@@ -156,7 +156,7 @@ struct LibraryView: View {
                 return
             }
             // update model's songs array with new song
-            self.model.songs = Array(songs)
+            model.songs = Array(songs)
         }
     }
 
@@ -164,7 +164,7 @@ struct LibraryView: View {
     private func deleteSong(song: Song) {
         withAnimation {
             // updates audio player's queue to handle song being deleted
-            self.model.deleteSong(deleteSong: song.title!)
+            model.deleteSong(deleteSong: song.title!)
             do {
                 // removes the song file from app's document directory
                 try FileManager.default.removeItem(at: Helper.getDocumentsDirectory().appendingPathComponent(song.title!))
@@ -183,7 +183,7 @@ struct LibraryView: View {
                 return
             }
             // model's songs array is updated
-            self.model.songs = Array(songs)
+            model.songs = Array(songs)
         }
     }
     
