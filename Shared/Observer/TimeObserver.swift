@@ -14,7 +14,7 @@ class TimeObserver {
     let publisher = PassthroughSubject<TimeInterval, Never>()
     
     // audio player whos current playback time is to be observed
-    private weak var player: AVQueuePlayer?
+    private weak var player: AVPlayer?
     
     // observer varaible to observe changes in the audio player's current song's playback time
     private var timeObservation: Any?
@@ -23,7 +23,7 @@ class TimeObserver {
     private var timeUpdating = false
     
     // constructor to store audio player reference and initialize time observer
-    init(player: AVQueuePlayer) {
+    init(player: AVPlayer) {
         self.player = player
         
         // Sets observer to observe the audio player's current song's playback time every 0.5 seconds
@@ -40,6 +40,10 @@ class TimeObserver {
             
             // Publishes the new current playback time of the audio player to be received by PlayerView's time Slider
             self.publisher.send(time.seconds)
+            
+            if time.seconds == player.currentItem?.duration.seconds {
+                Model.shared.next()
+            }
         }
     }
     

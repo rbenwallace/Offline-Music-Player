@@ -72,7 +72,7 @@ struct PlayerView: View {
                             .padding(.horizontal, 20)
                             .multilineTextAlignment(.center)
                             .onTapGesture {
-                                model.prev()
+                                model.previous()
                                 model.isPlaying = true
                             }
                         

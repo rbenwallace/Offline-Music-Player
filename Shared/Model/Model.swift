@@ -14,7 +14,7 @@ class Model: ObservableObject {
     static let shared = Model()
 
     // Audio player
-    private var audioPlayer: AVQueuePlayer
+    private var audioPlayer: AVPlayer
     
     // Published array of songs used to display playlist songs in PlaylistSongsView
     @Published var songs = [Song]()
@@ -41,16 +41,19 @@ class Model: ObservableObject {
     @Published var currentSongObserver: CurrentSongObserver
     
     // Published Array of songs which represents the current playlist being played
-    @Published var playlistSongs = [String]()
-    
-    // Array of songs used to popular the audio player when a song from a new playlist/library is played
-    private var playerSongs = [AVPlayerItem]()
+    @Published var playlistSongs = [Song]()
     
     // Published boolean to determine whether or not the playerView should be presented
     @Published var isPlayerViewPresented = false
     
     // State TimeInterval variable which is updated by the view's receiver and populates the time slider's duration time for the current playing song
     @Published var currentDuration: TimeInterval = 0
+    
+    // index of current song in current playing playlist
+    private var currentSongIndex: Int = 0
+    
+    // boolean of whether or not a queued song is playing
+    private var queuePlaying = false
     
     // Constructs audioPlayer and its observers
     init() {
@@ -59,25 +62,21 @@ class Model: ObservableObject {
         self.currentSongObserver = CurrentSongObserver(player: AVQueuePlayer())
     }
     
+    // returns current playing song index
+    func getCurrentSongIndex() -> Int {
+        return currentSongIndex
+    }
+    
     // returns the audio player's current item
     func getPlayerCurrentItem() -> AVPlayerItem? {
         return audioPlayer.currentItem
     }
     
-    // for testing only 
-    func getAudioPlayerSize() -> Int {
-        return audioPlayer.items().count
-    }
-    
-    // for testing only
-    func testSeek(currentTime: TimeInterval) {
-        // The time slider update is complete and the audio player must now seek to the new current time
-        audioPlayer.seek(to: CMTime(seconds: currentTime, preferredTimescale: 600))
-    }
-    
-    // for testing only
-    func appendPlayerItem(title: String) {
-        playerSongs.append(AVPlayerItem(url: Helper.getDocumentsDirectory().appendingPathComponent(title)))
+    // handles a song being added to the queue
+    func addToQueue(song: Song) {
+        if !queuedSongs.contains(song) {
+            queuedSongs.append(song)
+        }
     }
     
     // performs seek on the audio player's current playing item
@@ -99,65 +98,17 @@ class Model: ObservableObject {
         
         if currentSong != nil {
             // updates currentSong index depending on where in the queue the song was deleted
-            if let idx = playlistSongs.firstIndex(where: { $0 == deleteSong }) {
-                // saves current song index in playlistSongs array
-                let currentSongIndex = playlistSongs.count - audioPlayer.items().count
-                
+            if let idx = playlistSongs.firstIndex(where: { $0.title! == deleteSong }) {
                 // skips to next song if current song playing is being deleted
                 if currentSongIndex == idx {
-                    audioPlayer.advanceToNextItem()
+                    next()
+                } else if currentSongIndex > idx {
+                    currentSongIndex -= 1
                 }
                 
                 // removes the song from playlistSongs array
                 playlistSongs.remove(at: idx)
             }
-            
-            let deleted: [String] = [deleteSong]
-            var removeArr: [AVPlayerItem] = []
-            
-            // generates an array of songs from audioPlayer's current queue that need to be removed
-            for ind in 0...audioPlayer.items().count-1{
-                let asset = audioPlayer.items()[ind].asset
-                if let urlAsset = asset as? AVURLAsset {
-                    if deleted.contains(urlAsset.url.lastPathComponent) {
-                        removeArr.append(audioPlayer.items()[ind])
-                    }
-                }
-            }
-            // removes the desired songs from the queue
-            for removeSong in removeArr {
-                audioPlayer.remove(removeSong)
-            }
-        }
-    }
-    
-    // Populates audioPlayer's queue with new playlist/library songs and starts playing tge songs
-    func playQueue() {
-        do {
-            // clears all existing songs from audioPlayer's old queue
-            audioPlayer.removeAllItems()
-            
-            // populates audioPlayer's queue with songs from new playlist/library
-            for s in playerSongs {
-                audioPlayer.insert(s, after: nil)
-            }
-            
-            // audioPlayer starts playing the audio
-            audioPlayer.play()
-            
-            // audioPlayer observers for the view components inside PlayerView are reinitialized
-            timeObserver = TimeObserver(player: audioPlayer)
-            currentSongObserver = CurrentSongObserver(player: audioPlayer)
-            
-            // sets is playing state to true
-            isPlaying = true
-            
-            // AVAudioSession is initialized
-            try AVAudioSession.sharedInstance().setCategory(.playback)
-            try AVAudioSession.sharedInstance().setCategory(.playback, options: [.mixWithOthers])
-            try AVAudioSession.sharedInstance().setActive(true)
-        } catch let error {
-            print("Sound Play Error -> \(error)")
         }
     }
     
@@ -167,44 +118,23 @@ class Model: ObservableObject {
         isPlaying = false;
     }
     
-    // unpauses audioPlayer's audio and changes the isPlaying state to true
-    func unPause() {
-        audioPlayer.play()
-        isPlaying = true;
-    }
-    
     // audioPlayer's current song either restarts or goes to the previous song in the current playlist/library
-    func prev() {
-        audioPlayer.pause()
+    func previous() {
         // restarts audioPlayer's current song if it has been playing for more than 5 seconds
         let newTime = CMTime(seconds: 5, preferredTimescale: 1)
         if audioPlayer.currentTime() > newTime {
             audioPlayer.seek(to: .zero)
-            audioPlayer.play()
-            isPlaying = true;
+            unPause()
         }
+        
         // updates audioPlayer's current song to the previous song in the current playlist/library while keeping audioPlayer's queue consitent with playlistSongs
         else {
-            if audioPlayer.items().count != 0 {
-                // inserts the current playing song to the front of the queue
-                let diff = playlistSongs.count - audioPlayer.items().count
-                let avSong = AVPlayerItem(url: Helper.getDocumentsDirectory().appendingPathComponent(playlistSongs[diff]))
-                audioPlayer.insert(avSong, after: audioPlayer.items()[0])
-                
-                // if the current song is not the first song in the playlist then add the song prior to it in playlistSongs to the front of the queue
-                if diff != 0 {
-                    let avSong2 = AVPlayerItem(url: Helper.getDocumentsDirectory().appendingPathComponent(playlistSongs[diff-1]))
-                    audioPlayer.insert(avSong2, after: audioPlayer.items()[0])
-                }
-            } else {
-                // inserts the last song in the playlist
-                let avSong = AVPlayerItem(url: Helper.getDocumentsDirectory().appendingPathComponent(playlistSongs[-1]))
-                audioPlayer.insert(avSong, after: nil)
+            if queuePlaying == false {
+                currentSongIndex = max(currentSongIndex - 1, 0)
             }
-            // audioPlayer resumess playing audio
-            audioPlayer.advanceToNextItem()
-            audioPlayer.play()
-            isPlaying = true;
+            let newSong = getNextSong(song: playlistSongs[currentSongIndex])
+            audioPlayer.replaceCurrentItem(with: newSong)
+            unPause()
         }
     }
     
@@ -248,48 +178,38 @@ class Model: ObservableObject {
     func next() {
         // adds the next song from queuedSongs (if one exists) to the front of audioPlayer's queue
         if queuedSongs.count != 0 {
-            let newSong = AVPlayerItem(url: Helper.getDocumentsDirectory().appendingPathComponent(queuedSongs.remove(at: 0).title!))
-            if audioPlayer.items().count == 0{
-                audioPlayer.insert(newSong, after: nil)
-            } else {
-                audioPlayer.insert(newSong, after: audioPlayer.items()[0])
-            }
+            queuePlaying = true
+            let newSong = getNextSong(song: queuedSongs.remove(at: 0))
+            audioPlayer.replaceCurrentItem(with: newSong)
+            unPause()
+            return
         }
+        
+        currentSongIndex += 1
+        queuePlaying = false
+        
+        if currentSongIndex >= playlistSongs.count {
+            isPlaying = false
+            currentSong = nil
+            isPlayerViewPresented = false
+            audioPlayer.replaceCurrentItem(with: nil)
+            return
+        }
+        
         // audio player advances to the next song and resumes playing audio
-        audioPlayer.advanceToNextItem()
-        if audioPlayer.currentItem != nil{
-            audioPlayer.play()
-            isPlaying = true;
+        let newSong = getNextSong(song: playlistSongs[currentSongIndex])
+        if newSong != nil{
+            audioPlayer.replaceCurrentItem(with: newSong)
+            unPause()
         }
     }
     
-    // handles a song being added to the queue
-    func addToQueue(song: Song) {
-        if !queuedSongs.contains(song) {
-            queuedSongs.append(song)
+    // updates audioPlayer with next song to be played
+    func getNextSong(song: Song) -> AVPlayerItem? {
+        if currentSongIndex >= playlistSongs.count {
+            return nil
         }
-    }
-    
-    // increments the current playing songs plays attribute
-    func updatePlays() {
-        // parse song details from audio player's current playing song
-        let asset = audioPlayer.currentItem?.asset
-        if let urlAsset = asset as? AVURLAsset {
-            // fetch new current playing song from the database and update its plays attribute then save the viewContext
-            do {
-                let viewContext = PersistenceController.shared.container.viewContext
-                let request = NSFetchRequest<Song>(entityName: "Song")
-                request.predicate = NSPredicate(format: "title == %@", urlAsset.url.lastPathComponent)
-                let result = try viewContext.fetch(request) as [Song]
-                if result.count != 0 {
-                    let song = result.first!
-                    song.plays = song.plays + 1
-                    try viewContext.save()
-                }
-            } catch {
-                print("Failed to incriment current song's plays attribute in song observer: \(error.localizedDescription)")
-            }
-        }
+        return AVPlayerItem(url: Helper.getDocumentsDirectory().appendingPathComponent(song.title!))
     }
     
     // handles request to play a song
@@ -303,28 +223,43 @@ class Model: ObservableObject {
                 }
             }
         }
+        queuePlaying = false
+        
         // finds index of song in songs array
-        var songInd = 0
         for s in 0...songs.count-1 {
             if songs[s].id == id {
-                songInd = s
+                currentSongIndex = s
                 break
             }
         }
         // sets playlistSongs equal to songs array
-        playlistSongs = songs.map { $0.title! }
-        playerSongs = []
-        let count = songInd...songs.count - 1
+        playlistSongs = songs
         
-        // populates the playerSongs array with new playlist/library songs
-        for s in count {
-            playerSongs.append(AVPlayerItem(url: Helper.getDocumentsDirectory().appendingPathComponent(playlistSongs[s])))
+        let newSong = getNextSong(song: playlistSongs[currentSongIndex])
+        audioPlayer.replaceCurrentItem(with: newSong)
+        
+        // audioPlayer starts playing the audio and sets isPlaying state to true
+        unPause()
+        
+        // audioPlayer observers for the view components inside PlayerView are reinitialized
+        timeObserver = TimeObserver(player: audioPlayer)
+        currentSongObserver = CurrentSongObserver(player: audioPlayer)
+        
+        do {
+            // AVAudioSession is initialized
+            try AVAudioSession.sharedInstance().setCategory(.playback)
+            try AVAudioSession.sharedInstance().setCategory(.playback, options: [.mixWithOthers])
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print("AVSession failed to start")
+            return
         }
-        
-        // calls playQueue to reinitialize audioPlayer with new songs and resume playing
-        playQueue()
+    }
+    
+    // unpauses audioPlayer's audio and changes the isPlaying state to true
+    func unPause() {
+        audioPlayer.play()
         isPlaying = true;
-        updatePlays()
     }
 }
 

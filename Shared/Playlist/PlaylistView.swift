@@ -28,13 +28,8 @@ struct PlaylistView: View {
                 List {
                     ForEach(playlists) { playlist in
                         NavigationLink(destination: {
-                            if playlist.title != "Most Played"{
-                                PlaylistSongsView(playlist: playlist)
-                                    .environmentObject(model)
-                            } else {
-                                SmartSongsView(playlistName: playlist.title!)
-                                    .environmentObject(model)
-                            }
+                            PlaylistSongsView(playlist: playlist)
+                                .environmentObject(model)
                         }, label: {
                             PlaylistCardView(playlist: playlist)
                         })

@@ -15,23 +15,19 @@ class CurrentSongObserver {
     // Observer that monitors changes in the audio players .currentItem property
     private var currentSongObservation: NSKeyValueObservation?
     
-    init(player: AVQueuePlayer) {
+    init(player: AVPlayer) {
         // Observes the audio player's current song changing
         currentSongObservation = player.observe(\.currentItem) { [weak self] player, change in
             guard let self = self else { return }
             // Publishes whether or not the audio player is playing a song
             self.publisher.send(player.currentItem != nil)
             
-            // When the audio player's current song changes, incriment the new songs plays attribute by 1
-            if player.currentItem != nil {
-                Model.shared.updatePlays()
-            }
             // if for some reason the new current playing song is invalid or cant be played, skip to the next song
-            else {
+            if player.currentItem == nil {
                 // if a song does not play for some reason but there are more songs in the playlist, skip it
-                if player.items().count > 0 {
-                    player.advanceToNextItem()
-                } else {
+                Model.shared.next()
+                
+                if player.currentItem == nil {
                     // there are no more songs so the player views should disappear
                     Model.shared.isPlaying = false
                     Model.shared.currentSong = nil

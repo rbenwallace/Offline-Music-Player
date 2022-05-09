@@ -12,7 +12,6 @@
 		E814C8AC27F6A84800B9DB4A /* Song+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E814C8A827F6A84800B9DB4A /* Song+CoreDataProperties.swift */; };
 		E814C8AD27F6A84800B9DB4A /* Playlist+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E814C8A927F6A84800B9DB4A /* Playlist+CoreDataClass.swift */; };
 		E814C8AE27F6A84800B9DB4A /* Playlist+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E814C8AA27F6A84800B9DB4A /* Playlist+CoreDataProperties.swift */; };
-		E814C8B027F8424E00B9DB4A /* Tests_AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E814C8AF27F8424E00B9DB4A /* Tests_AudioPlayer.swift */; };
 		E814C8BB27F859F200B9DB4A /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65FA27E1AB41004605A0 /* Model.swift */; };
 		E814C8BC27F85A2C00B9DB4A /* Offline_Music_PlayerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E111EF27E09FE800D96111 /* Offline_Music_PlayerApp.swift */; };
 		E814C8BD27F85A3400B9DB4A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E111F027E09FE900D96111 /* ContentView.swift */; };
@@ -21,7 +20,6 @@
 		E814C8C027F85A6700B9DB4A /* SongCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65F727E1AB41004605A0 /* SongCardView.swift */; };
 		E814C8C127F85A6F00B9DB4A /* PlaylistSongsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65F227E1AB41004605A0 /* PlaylistSongsView.swift */; };
 		E814C8C227F85A7500B9DB4A /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65F627E1AB41004605A0 /* LibraryView.swift */; };
-		E814C8C327F85A7B00B9DB4A /* SmartSongsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65F527E1AB41004605A0 /* SmartSongsView.swift */; };
 		E814C8C427F85A8000B9DB4A /* QueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65F927E1AB41004605A0 /* QueueView.swift */; };
 		E814C8C527F85A8800B9DB4A /* AddPlaylistSongsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65F027E1AB41004605A0 /* AddPlaylistSongsView.swift */; };
 		E814C8C627F85A8D00B9DB4A /* PlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65F827E1AB41004605A0 /* PlaylistView.swift */; };
@@ -45,7 +43,6 @@
 		E83C65FF27E1AB41004605A0 /* PlaylistSongsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65F227E1AB41004605A0 /* PlaylistSongsView.swift */; };
 		E83C660027E1AB41004605A0 /* CustonAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65F327E1AB41004605A0 /* CustonAlert.swift */; };
 		E83C660127E1AB41004605A0 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65F427E1AB41004605A0 /* PlayerView.swift */; };
-		E83C660227E1AB41004605A0 /* SmartSongsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65F527E1AB41004605A0 /* SmartSongsView.swift */; };
 		E83C660327E1AB41004605A0 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65F627E1AB41004605A0 /* LibraryView.swift */; };
 		E83C660427E1AB41004605A0 /* SongCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65F727E1AB41004605A0 /* SongCardView.swift */; };
 		E83C660527E1AB41004605A0 /* PlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83C65F827E1AB41004605A0 /* PlaylistView.swift */; };
@@ -92,12 +89,10 @@
 		E814C8A827F6A84800B9DB4A /* Song+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Song+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E814C8A927F6A84800B9DB4A /* Playlist+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Playlist+CoreDataClass.swift"; sourceTree = "<group>"; };
 		E814C8AA27F6A84800B9DB4A /* Playlist+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Playlist+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		E814C8AF27F8424E00B9DB4A /* Tests_AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_AudioPlayer.swift; sourceTree = "<group>"; };
 		E83C65F027E1AB41004605A0 /* AddPlaylistSongsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddPlaylistSongsView.swift; sourceTree = "<group>"; };
 		E83C65F227E1AB41004605A0 /* PlaylistSongsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistSongsView.swift; sourceTree = "<group>"; };
 		E83C65F327E1AB41004605A0 /* CustonAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustonAlert.swift; sourceTree = "<group>"; };
 		E83C65F427E1AB41004605A0 /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
-		E83C65F527E1AB41004605A0 /* SmartSongsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartSongsView.swift; sourceTree = "<group>"; };
 		E83C65F627E1AB41004605A0 /* LibraryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
 		E83C65F727E1AB41004605A0 /* SongCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongCardView.swift; sourceTree = "<group>"; };
 		E83C65F827E1AB41004605A0 /* PlaylistView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistView.swift; sourceTree = "<group>"; };
@@ -178,7 +173,6 @@
 			children = (
 				E83C65F227E1AB41004605A0 /* PlaylistSongsView.swift */,
 				E83C65F627E1AB41004605A0 /* LibraryView.swift */,
-				E83C65F527E1AB41004605A0 /* SmartSongsView.swift */,
 				E83C65F927E1AB41004605A0 /* QueueView.swift */,
 			);
 			path = Library;
@@ -283,7 +277,6 @@
 		E8E1120727E09FE900D96111 /* Tests iOS */ = {
 			isa = PBXGroup;
 			children = (
-				E814C8AF27F8424E00B9DB4A /* Tests_AudioPlayer.swift */,
 			);
 			path = "Tests iOS";
 			sourceTree = "<group>";
@@ -378,7 +371,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1320;
-				LastUpgradeCheck = 1320;
+				LastUpgradeCheck = 1330;
 				TargetAttributes = {
 					E8E111F627E09FE900D96111 = {
 						CreatedOnToolsVersion = 13.2.1;
@@ -463,7 +456,6 @@
 				E83C65FD27E1AB41004605A0 /* AddPlaylistSongsView.swift in Sources */,
 				E814C8AE27F6A84800B9DB4A /* Playlist+CoreDataProperties.swift in Sources */,
 				E814C8AD27F6A84800B9DB4A /* Playlist+CoreDataClass.swift in Sources */,
-				E83C660227E1AB41004605A0 /* SmartSongsView.swift in Sources */,
 				E83C660427E1AB41004605A0 /* SongCardView.swift in Sources */,
 				E8E1121E27E09FE900D96111 /* Persistence.swift in Sources */,
 				E8E1121827E09FE900D96111 /* Database.xcdatamodeld in Sources */,
@@ -504,7 +496,6 @@
 				E814C8BC27F85A2C00B9DB4A /* Offline_Music_PlayerApp.swift in Sources */,
 				E814C8BB27F859F200B9DB4A /* Model.swift in Sources */,
 				E814C8BD27F85A3400B9DB4A /* ContentView.swift in Sources */,
-				E814C8C327F85A7B00B9DB4A /* SmartSongsView.swift in Sources */,
 				E814C8C727F85A9100B9DB4A /* PlaylistCardView.swift in Sources */,
 				E814C8CF27F85AC800B9DB4A /* Playlist+CoreDataProperties.swift in Sources */,
 				E814C8CE27F85AC200B9DB4A /* Playlist+CoreDataClass.swift in Sources */,
@@ -520,7 +511,6 @@
 				E814C8BF27F85A5100B9DB4A /* TimeObserver.swift in Sources */,
 				E814C8CD27F85ABD00B9DB4A /* Song+CoreDataProperties.swift in Sources */,
 				E814C8C627F85A8D00B9DB4A /* PlaylistView.swift in Sources */,
-				E814C8B027F8424E00B9DB4A /* Tests_AudioPlayer.swift in Sources */,
 				E814C8D127F85AEC00B9DB4A /* Database.xcdatamodeld in Sources */,
 				E814C8BE27F85A4B00B9DB4A /* CurrentSongObserver.swift in Sources */,
 				E814C8C527F85A8800B9DB4A /* AddPlaylistSongsView.swift in Sources */,
@@ -737,6 +727,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = macOS/macOS.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -766,6 +757,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = macOS/macOS.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
