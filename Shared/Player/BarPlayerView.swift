@@ -16,6 +16,10 @@ struct BarPlayerView: View {
     
     @State private var barYOffset = CGSize.zero
     
+    @State private var xDragging = false
+    
+    @State private var dragStarted = false
+    
     @State private var barYDragging = false
             
     // environment object which contains published variables used in this view, and allows for audio player manipulation
@@ -49,29 +53,6 @@ struct BarPlayerView: View {
                         .opacity(4 - Double(abs(xOffset.width)/25))
                         .padding(.leading, 100)
                         // handles downward drag gesture to exit the view
-                        .gesture(
-                            DragGesture()
-                                // If the view is being dragged down, update the offset value
-                                .onChanged { gesture in
-                                    if abs(gesture.translation.width) > 20 {
-                                        xOffset = gesture.translation
-                                    }
-                                }
-                                // When the drag gesture has been completed, update the isPlayerViewPresented variable if the view was dragged down far enough or otherwise reset the offset to 0
-                                .onEnded { _ in
-                                    if xOffset.width > 80 {
-                                        UIImpactFeedbackGenerator(style: .soft).impactOccurred(intensity: 0.7)
-                                        model.previous()
-                                    }
-                                    else if xOffset.width < -100 {
-                                        UIImpactFeedbackGenerator(style: .soft).impactOccurred(intensity: 0.7)
-                                        model.next()
-                                    }
-                                    withAnimation {
-                                        xOffset = .zero
-                                    }
-                                }
-                        )
                         
                         // displays audio image and title of currently playing song title
                         Image(uiImage: UIImage(named: "song_cover") ?? UIImage())
@@ -108,7 +89,56 @@ struct BarPlayerView: View {
                     }
                 }
             }
-            
+            .offset(x: 0, y: barYOffset.height)
+            .opacity(2 - Double(abs(barYOffset.height)/100))
+            .gesture(
+                DragGesture()
+                    // If the view is being dragged down, update the offset value
+                    .onChanged { gesture in
+                        dragStarted = true
+                        if abs(gesture.translation.width) > abs(gesture.translation.height) {
+                            xOffset = gesture.translation
+                            xDragging = true
+                        }
+                        else {
+                            barYOffset = gesture.translation
+                            xDragging = false
+                        }
+                    }
+                    // When the drag gesture has been completed, update the isPlayerViewPresented variable if the view was dragged down far enough or otherwise reset the offset to 0
+                    .onEnded { _ in
+                        if xDragging {
+                            if xOffset.width > 80 {
+                                UIImpactFeedbackGenerator(style: .soft).impactOccurred(intensity: 0.7)
+                                model.previous()
+                            }
+                            else if xOffset.width < -100 {
+                                UIImpactFeedbackGenerator(style: .soft).impactOccurred(intensity: 0.7)
+                                model.next()
+                            }
+                            withAnimation {
+                                xOffset = .zero
+                            }
+                            barYOffset = .zero
+                        }
+                        else {
+                            if barYOffset.height < -200 {
+                                withAnimation {
+                                    model.isPlayerViewPresented = true
+                                }
+                                barYOffset = .zero
+                            }
+                            else {
+                                withAnimation {
+                                    barYOffset = .zero
+                                }
+                            }
+                            barYDragging = false
+                            xOffset = .zero
+                        }
+                        dragStarted = true
+                    }
+            )
         }
     }
 }
