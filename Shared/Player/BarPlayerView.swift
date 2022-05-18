@@ -14,16 +14,21 @@ struct BarPlayerView: View {
     // keeps track of the amount the text has been dragged left and right
     @State private var xOffset = CGSize.zero
     
-    @State private var barYOffset = CGSize.zero
+    @Binding private var barYOffset: CGSize
+    
+    @Binding private var barYDragging: Bool
     
     @State private var xDragging = false
     
     @State private var dragStarted = false
-    
-    @State private var barYDragging = false
             
     // environment object which contains published variables used in this view, and allows for audio player manipulation
     @EnvironmentObject var model: Model
+    
+    init(barYOffset: Binding<CGSize>, barYDragging: Binding<Bool>) {
+        self._barYOffset = barYOffset
+        self._barYDragging = barYDragging
+    }
     
     var body: some View {
         // only shows the view if a song is currently playing 
@@ -89,7 +94,7 @@ struct BarPlayerView: View {
                     }
                 }
             }
-            .offset(x: 0, y: barYOffset.height)
+            .offset(x: 0, y: barYOffset.height-49)
             .opacity(2 - Double(abs(barYOffset.height)/100))
             .gesture(
                 DragGesture()
@@ -101,6 +106,7 @@ struct BarPlayerView: View {
                             xDragging = true
                         }
                         else {
+                            barYDragging = true
                             barYOffset = gesture.translation
                             xDragging = false
                         }

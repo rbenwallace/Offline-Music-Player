@@ -75,10 +75,8 @@ struct ContentView: View {
             // Displays either BarPlayerView or PlayerView when a song is being played
             Group {
                 if model.isPlayerViewPresented == false {
-                    BarPlayerView()
+                    BarPlayerView(barYOffset: $barYOffset, barYDragging: $barYDragging)
                         .environmentObject(model)
-                        .offset(x: 0, y: barYOffset.height - 49)
-                        .opacity(2 - Double(abs(barYOffset.height)/100))
                 }
                 
                 if model.isPlayerViewPresented || barYDragging {
