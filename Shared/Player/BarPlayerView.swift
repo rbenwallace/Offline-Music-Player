@@ -11,9 +11,13 @@ struct BarPlayerView: View {
     // used to determine systems background color
     @Environment(\.colorScheme) var colorScheme
     
-    // keeps track of the amount the view has been dragged
-    @State private var offset = CGSize.zero
+    // keeps track of the amount the text has been dragged left and right
+    @State private var xOffset = CGSize.zero
     
+    @State private var barYOffset = CGSize.zero
+    
+    @State private var barYDragging = false
+            
     // environment object which contains published variables used in this view, and allows for audio player manipulation
     @EnvironmentObject var model: Model
     
@@ -40,29 +44,31 @@ struct BarPlayerView: View {
                             Spacer()
                         }
                         .contentShape(Rectangle())
-                        .offset(x: offset.width, y: 0)
+                        .offset(x: xOffset.width, y: 0)
                         // makes the view fade as it gets dragged closer to the bottom
-                        .opacity(4 - Double(abs(offset.width)/25))
+                        .opacity(4 - Double(abs(xOffset.width)/25))
                         .padding(.leading, 100)
                         // handles downward drag gesture to exit the view
                         .gesture(
                             DragGesture()
                                 // If the view is being dragged down, update the offset value
                                 .onChanged { gesture in
-                                    offset = gesture.translation
+                                    if abs(gesture.translation.width) > 20 {
+                                        xOffset = gesture.translation
+                                    }
                                 }
                                 // When the drag gesture has been completed, update the isPlayerViewPresented variable if the view was dragged down far enough or otherwise reset the offset to 0
                                 .onEnded { _ in
-                                    if offset.width > 80 {
+                                    if xOffset.width > 80 {
                                         UIImpactFeedbackGenerator(style: .soft).impactOccurred(intensity: 0.7)
                                         model.previous()
                                     }
-                                    else if offset.width < -100 {
+                                    else if xOffset.width < -100 {
                                         UIImpactFeedbackGenerator(style: .soft).impactOccurred(intensity: 0.7)
                                         model.next()
                                     }
                                     withAnimation {
-                                        offset = .zero
+                                        xOffset = .zero
                                     }
                                 }
                         )
@@ -94,7 +100,15 @@ struct BarPlayerView: View {
                 }
                 // see through background that still provides visible text
                 .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
+                
+                .onTapGesture {
+                    withAnimation(Animation.spring(response: 0.7, dampingFraction: 0.85)) {
+                        UIImpactFeedbackGenerator(style: .soft).impactOccurred(intensity: 0.7)
+                        model.isPlayerViewPresented.toggle()
+                    }
+                }
             }
+            
         }
     }
 }

@@ -21,6 +21,12 @@ struct ContentView: View {
     // State Int to track of the currently selected app menu tab
     @State private var tab = 0
     
+    @State private var playerYOffset = CGSize.zero
+    
+    @State private var barYOffset = CGSize.zero
+    
+    @State private var barYDragging = false
+    
     var body: some View{
         ZStack {
             // App's menu tab at the bottom of the screen
@@ -68,25 +74,68 @@ struct ContentView: View {
             
             // Displays either BarPlayerView or PlayerView when a song is being played
             Group {
-                // displays the full screen player, PlayerView
-                if model.isPlayerViewPresented {
-                    PlayerView()
-                        .environmentObject(model)
+                Group {
+                    if model.isPlayerViewPresented == false {
+                        BarPlayerView()
+                            .environmentObject(model)
+                            .offset(x: 0, y: barYOffset.height - 49)
+                            .opacity(2 - Double(abs(barYOffset.height)/100))
+                    }
+                    
+                    if model.isPlayerViewPresented || barYDragging {
+                        PlayerView()
+                            .environmentObject(model)
+                            .offset(x: 0, y: model.isPlayerViewPresented ? playerYOffset.height : (barYOffset.height - 49 + UIScreen.main.bounds.height))
+                            .opacity(1.5 - Double(playerYOffset.height/300))
+                            .gesture(
+                                DragGesture()
+                                    // If the view is being dragged down, update the offset value
+                                    .onChanged { gesture in
+                                        if gesture.translation.height > CGSize(width: 0, height: 20).height {
+                                            playerYOffset = gesture.translation
+                                        }
+                                    }
+                                    // When the drag gesture has been completed, update the isPlayerViewPresented variable if the view was dragged down far enough or otherwise reset the offset to 0
+                                    .onEnded { _ in
+                                        if playerYOffset.height > 200 {
+                                            withAnimation {
+                                                model.isPlayerViewPresented = false
+                                            }
+                                            playerYOffset = .zero
+                                        }
+                                        else {
+                                            withAnimation {
+                                                playerYOffset = .zero
+                                            }
+                                        }
+                                    }
+                            )
+                    }
                 }
-                // Displays the minimized player BarPlayerView, and when pressed displays the full screen PlayerView
-                else {
-                    BarPlayerView()
-                        .environmentObject(model)
-                        .onTapGesture {
-                            withAnimation(Animation.spring(response: 0.7, dampingFraction: 0.85)) {
-                                UIImpactFeedbackGenerator(style: .soft).impactOccurred(intensity: 0.7)
-                                model.isPlayerViewPresented.toggle()
-                            }
+                .gesture(
+                    DragGesture()
+                        // If the view is being dragged down, update the offset value
+                        .onChanged { gesture in
+                            barYDragging = true
+                            barYOffset = gesture.translation
                         }
-                        .padding(.bottom, 49)
-                }
+                        // When the drag gesture has been completed, update the isPlayerViewPresented variable if the view was dragged down far enough or otherwise reset the offset to 0
+                        .onEnded { _ in
+                            if barYOffset.height < -200 {
+                                withAnimation {
+                                    model.isPlayerViewPresented = true
+                                }
+                                barYOffset = .zero
+                            }
+                            else {
+                                withAnimation {
+                                    barYOffset = .zero
+                                }
+                            }
+                            barYDragging = false
+                        }
+                )
             }
-            .zIndex(2.0)
         }
         // gives buttons and icons pink tint
         .accentColor(.pink)
